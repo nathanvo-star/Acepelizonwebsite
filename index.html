@@ -1,0 +1,2567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ace Pelizon Plumbing - Legacy Meets Innovation</title>
+
+    <!-- Google Fonts: Anton (Block), Roboto Slab (Serif), Inter (Sans), Merriweather (Legacy Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800;900&family=Merriweather:wght@300;400;700;900&family=Roboto+Slab:wght@400;700;900&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ace-navy': '#1b2a41',
+                        'ace-blue': '#1e3a8a',
+                        'ace-brand-blue': '#3a8abd',
+                        'fleet-yellow': '#ffcc00',
+                        'ace-gray': '#f3f4f6',
+                        'blueprint-blue': '#0a4f8b',
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'reveal-up': 'revealUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'expand-line': 'expandLine 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s',
+                    },
+                    keyframes: {
+                        revealUp: {
+                            '0%': { transform: 'translateY(110%)' },
+                            '100%': { transform: 'translateY(0)' },
+                        },
+                        expandLine: {
+                            '0%': { width: '0%' },
+                            '100%': { width: '100%' },
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'serif': ['Roboto Slab', 'serif'],
+                        'block': ['Anton', 'sans-serif'],
+                        'merriweather': ['Merriweather', 'serif'],
+                    },
+                    boxShadow: {
+                        'text': '0 2px 4px rgba(0,0,0,0.5)',
+                        'glow': '0 0 15px rgba(255, 204, 0, 0.3)',
+                    },
+                    transitionTimingFunction: {
+                        'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            /* Prevent horizontal scroll from effects */
+        }
+
+        /* Blueprint Pattern for X-Ray */
+        .blueprint-grid {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+
+
+
+        .hero-bg {
+            background-image: url('hero.png');
+            background-size: cover;
+            background-position: center 35%;
+            background-repeat: no-repeat;
+        }
+
+        .nav-link {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .text-shadow-strong {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        /* 3D Animation Styles */
+        .perspective-container {
+            perspective: 1000px;
+        }
+
+        .floating-card {
+            width: 28rem;
+            height: 28.5rem;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: float-spin 12s infinite linear;
+            z-index: 10;
+        }
+
+        .card-glow {
+            position: absolute;
+            width: 26rem;
+            height: 37rem;
+            background: radial-gradient(circle, rgba(255, 204, 0, 0.25) 0%, rgba(15, 23, 42, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            background-color: transparent !important;
+        }
+
+        .card-front {
+            background-color: transparent !important;
+        }
+
+        .card-back {
+            background-color: transparent !important;
+            transform: rotateY(180deg);
+        }
+
+        .card-back img {
+            /* Normalized for new back image */
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .card-face img {
+            /* Reset scale hacks now that we have a real transparent image */
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes float-spin {
+            0% {
+                transform: rotateY(0deg) translateY(0) rotateZ(-10deg);
+            }
+
+            50% {
+                transform: rotateY(180deg) translateY(-40px) rotateZ(-10deg);
+            }
+
+            100% {
+                transform: rotateY(360deg) translateY(0) rotateZ(-10deg);
+            }
+        }
+
+        /* Master Dealer Carousel - 3D Styles */
+        #carousel-container {
+            perspective: 2000px;
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+            /* Prevent horizontal scroll from orbit */
+        }
+
+        .carousel-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20rem;
+            /* Fixed width for calculation simplicity */
+            height: 28rem;
+            transform-origin: center center;
+            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            /* Cinematic Easing */
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s ease-out;
+            /* Independent flip timing */
+            transform-style: preserve-3d;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        /* States */
+        /* Active: Centered, Flipped (Yellow Reveal), Glow */
+        .state-active {
+            z-index: 20;
+            transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+        }
+
+        .state-active .flip-card-inner {
+            transform: rotateY(180deg);
+            transition-delay: 0.3s;
+            /* Wait for "deal" to mostly finish before flip */
+            box-shadow: 0 0 60px rgba(255, 204, 0, 0.6);
+            /* Active Focus Glow */
+        }
+
+        /* Left Flank */
+        .state-left {
+            z-index: 10;
+            transform: translate(-180%, -50%) scale(0.8) rotateY(45deg);
+            /* Orbit Left */
+        }
+
+        .state-left .flip-card-inner {
+            transform: rotateY(0deg);
+            /* Show Ace Back */
+        }
+
+        /* Right Flank */
+        .state-right {
+            z-index: 10;
+            transform: translate(80%, -50%) scale(0.8) rotateY(-45deg);
+            /* Orbit Right */
+        }
+
+        .state-right .flip-card-inner {
+            transform: rotateY(0deg);
+            /* Show Ace Back */
+        }
+
+        /* Hidden / Stacked Behind */
+        .state-hidden {
+            z-index: 0;
+            transform: translate(-50%, -50%) scale(0.5) translateZ(-500px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Faces */
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            overflow: hidden;
+        }
+
+        .flip-card-front {
+            background-color: #0f172a;
+        }
+
+        .flip-card-back {
+            background-color: #ffcc00;
+            /* Fleet Yellow */
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border: 8px solid white;
+        }
+
+        /* Mobile Brain - Responsive Overrides */
+        /* Mobile Brain - Responsive Overrides */
+        @media (max-width: 768px) {
+
+            /* 1. Hero: 3D Perspective Scale */
+            .hero-card-container {
+                perspective: 1000px !important;
+                display: flex !important;
+                margin-top: 2rem !important;
+                margin-bottom: 2rem !important;
+                width: 60% !important;
+                /* Adjusted for better mobile fit */
+                min-height: 15rem !important;
+            }
+
+            .floating-card img {
+                /* Scroll-linked simulation: fixed tilt + Original Front Transform */
+                transform: rotateX(10deg) rotateY(-5deg) scale(1.21) translate(-5px, 6px) !important;
+                transition: transform 0.5s ease-out;
+            }
+
+            .card-back,
+            .card-face.card-back {
+                background: transparent !important;
+                background-color: transparent !important;
+                background-image: none !important;
+                border: none !important;
+                box-shadow: none !important;
+                outline: none !important;
+                -webkit-backface-visibility: hidden !important;
+                backface-visibility: hidden !important;
+                border-radius: 0 !important;
+                /* Remove circle clip to debug/fix */
+            }
+
+            .card-back img {
+                /* Back matches Front (flipped using rotation instead of scale) */
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: contain !important;
+                background: transparent !important;
+                /* Increased scale to 1.45 to match visual size of front (overcoming perspective/rendering gap) */
+                transform: rotateX(10deg) rotateY(-5deg) scale(1.45) translate(5px, 6px) rotateY(180deg) !important;
+                -webkit-backface-visibility: visible !important;
+                backface-visibility: visible !important;
+            }
+
+            /* 2. About Us: Mobile Slider Physics */
+            /* REMOVED YELLOW LINE AS REQUESTED */
+            .group.select-none::after {
+                display: none !important;
+            }
+
+            @keyframes swipe-hint {
+
+                0%,
+                100% {
+                    left: 50%;
+                }
+
+                50% {
+                    left: 45%;
+                }
+
+                /* Subtle hint */
+            }
+
+            /* 3. Services: Stacking Card Animation */
+            #services .carousel-card {
+                position: sticky !important;
+                top: 100px !important;
+                /* Sticky top */
+                margin-top: 20px !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                /* Full width on mobile */
+                transform: none !important;
+                /* Reset 3D transform */
+                opacity: 1 !important;
+                /* Ensure visible */
+                margin-left: auto !important;
+                margin-right: auto !important;
+                box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.5) !important;
+                /* Shadow for depth */
+            }
+
+            /* 3. Services: Snap-Scroll Service Deck */
+            /* 3. Services: Restore 3D "Winning Hand" on Mobile */
+            #carousel-container {
+                display: block !important;
+                overflow: visible !important;
+                scroll-snap-type: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                transform: scale(0.50);
+                /* Reduced from 0.65 as requested */
+                transform-origin: top center;
+                height: 350px !important;
+                /* Reduced height for smaller items */
+                margin-top: 9rem !important;
+                /* Balanced padding */
+                margin-left: auto !important;
+                /* "CENTER" */
+                margin-right: auto !important;
+                margin-bottom: -5rem !important;
+                /* Reduce bottom gap */
+            }
+
+            /* Restore Arrows on Mobile */
+            .carousel-nav-arrow {
+                display: block !important;
+                transform: scale(1.5);
+                /* Bigger touch targets */
+                top: 45% !important;
+                /* Adjusted for smaller scale */
+            }
+
+            /* Reset Cards to allow 3D positioning from JS */
+            #services .carousel-card {
+                position: absolute !important;
+                width: 20rem !important;
+                /* Back to desktop width */
+                height: 28rem !important;
+                min-width: auto !important;
+                scroll-snap-align: none !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                /* Let JS handle shadows */
+                top: 58% !important;
+                /* "Move a bit up" (from 65%) */
+                left: 50% !important;
+                /* Ensure centered relative to container */
+                transform-origin: center center;
+            }
+
+            /* HIDE GHOST CARD */
+            #services .state-hidden {
+                display: none !important;
+                opacity: 0 !important;
+            }
+
+            /* MOBILE 3D TUNING: Spread & Peeking */
+            #services .state-left {
+                transform: translate(-90%, -50%) scale(0.8) rotateY(35deg) !important;
+                /* Tighter stack, less rotation */
+                z-index: 10 !important;
+            }
+
+            #services .state-right {
+                transform: translate(-10%, -50%) scale(0.8) rotateY(-35deg) !important;
+                /* Tighter stack, less rotation */
+                z-index: 10 !important;
+            }
+
+            #services .state-active {
+                transform: translate(-50%, -50%) scale(1) rotateY(0deg) !important;
+                z-index: 30 !important;
+            }
+
+            /* Center Arrows Vertically on Mobile */
+            /* Container has padding-bottom 40px? No, reset in prev step. */
+            /* Scale is 0.65. Visual center might be different. */
+            .carousel-nav-arrow {
+                top: 50% !important;
+                /* Perfect Center */
+            }
+
+            /* FORCE Arrows into Gutter (Mobile) */
+            /* Ensure they are absolutely positioned and above cards */
+            #carousel-container .carousel-nav-arrow {
+                position: absolute !important;
+                z-index: 50 !important;
+                top: 50% !important;
+                transform: translateY(-50%) scale(1.5) !important;
+            }
+
+            /* FORCE Arrows to Screen Edge (Compensating for scale(0.5)) */
+            /* Container edge is at ~25% screen width due to scale(0.5). */
+            /* We need ~25% width negative offset to hit screen edge. */
+            /* ~350px width -> ~90px offset -> + padding -> -120px safe bet */
+            #carousel-container .carousel-nav-arrow:nth-of-type(1) {
+                left: -120px !important;
+                right: auto !important;
+            }
+
+            #carousel-container .carousel-nav-arrow:nth-of-type(2) {
+                right: -120px !important;
+                left: auto !important;
+            }
+
+            /* 4. Trust Hub: The Authority Loop */
+            /* Target the container of the logos (currently .flex.flex-col.md:flex-row) */
+            .border-b.border-white\/5 .max-w-7xl>div {
+                display: flex !important;
+                flex-direction: row !important;
+                overflow-x: hidden !important;
+                justify-content: flex-start !important;
+                gap: 0 !important;
+                white-space: nowrap !important;
+                mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+                -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            }
+
+            /* Target the individual logo items to animate */
+            .border-b.border-white\/5 .max-w-7xl>div>div {
+                flex-shrink: 0 !important;
+                animation: trust-loop 15s linear infinite !important;
+                margin-right: 4rem !important;
+                /* Space between logos */
+                width: auto !important;
+                /* Allow natural width */
+            }
+
+            @keyframes trust-loop {
+                0% {
+                    transform: translateX(100%);
+                }
+
+                100% {
+                    transform: translateX(-200%);
+                }
+
+                /* Scroll all the way across */
+            }
+
+            /* 5. Global Constraints */
+
+            /* 5. Global Constraints */
+            /* Uniform Padding */
+            .max-w-7xl {
+                padding-left: 24px !important;
+                padding-right: 24px !important;
+            }
+
+            /* Clean Labels */
+            label,
+            .form-label {
+                color: #1b2a41 !important;
+                /* Ace Navy */
+            }
+
+            /* Previous Fixes Maintained */
+            /* Thumb-Command Deck (Glass Dock) */
+            #mobile-conversion-bar {
+                display: flex !important;
+                position: fixed;
+                bottom: 24px;
+                /* Floating above safe area */
+                left: 50%;
+                transform: translateX(-50%);
+                width: 92%;
+                /* Floating card width */
+                background: rgba(255, 255, 255, 0.15);
+                /* Premium Glass */
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 24px;
+                padding: 8px;
+                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+                z-index: 9999;
+                justify-content: space-between;
+                gap: 12px;
+                transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                /* Bounce entry */
+                animation: slide-up-dock 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            }
+
+            @keyframes slide-up-dock {
+                0% {
+                    transform: translate(-50%, 150%);
+                }
+
+                100% {
+                    transform: translate(-50%, 0);
+                }
+            }
+
+            /* Dock Buttons */
+            .dock-btn {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'Inter', sans-serif;
+                font-weight: 700;
+                font-size: 0.95rem;
+                padding: 16px 0;
+                border-radius: 18px;
+                text-decoration: none;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                transition: transform 0.1s;
+            }
+
+            .dock-btn-primary {
+                background: #ffcc00;
+                /* Fleet Yellow */
+                color: #1b2a41;
+                /* Ace Navy */
+                box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3);
+            }
+
+            .dock-btn-secondary {
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            /* Haptic Visuals (Global) */
+            *:active {
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .dock-btn:active,
+            .hero-buttons a:active,
+            button:active {
+                transform: scale(0.96);
+            }
+
+            /* 90svh Container Height */
+            .hero-wrapper {
+                min-height: 90svh !important;
+                height: 90svh !important;
+            }
+
+            /* Hero Stack Reordering */
+            .hero-content-grid {
+                display: flex !important;
+                flex-direction: column !important;
+                padding-top: 2rem !important;
+            }
+
+            .hero-card-container {
+                /* Merged above */
+            }
+
+            .card-glow {
+                width: 120% !important;
+                height: 120% !important;
+                background: radial-gradient(circle, rgba(255, 204, 0, 0.4) 0%, rgba(15, 23, 42, 0) 70%) !important;
+                top: 60% !important;
+            }
+
+            /* Typography Polish */
+            .hero-headline span {
+                font-size: clamp(2.5rem, 11vw, 4.25rem) !important;
+            }
+
+            .hero-buttons {
+                width: 100% !important;
+                align-items: center !important;
+            }
+
+            .hero-buttons a {
+                width: 90% !important;
+                text-align: center !important;
+                padding-top: 1.25rem !important;
+                padding-bottom: 1.25rem !important;
+                font-size: 1rem !important;
+            }
+        }
+
+        /* Time Shift Slider Styles */
+        .slider-handle-container {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: #ffcc00;
+            z-index: 50;
+            cursor: ew-resize;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .slider-handle-knob {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #ffcc00;
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        /* HIDE SPINNER ON MOBILE (Safety Net) */
+        @media (max-width: 768px) {
+
+            .fa-spinner,
+            .spinner,
+            .loading-spinner,
+            .loader {
+                display: none !important;
+            }
+
+            /* HIDE SLIDER HANDLE (The "Spinning Circle" Knob) */
+            .slider-handle-container,
+            .slider-handle-knob {
+                display: none !important;
+            }
+
+            /* HIDE HERO 3D CARD ON MOBILE (As Requested) */
+            .hero-card-container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-[#0f172a] text-white antialiased overflow-x-hidden">
+
+    <div class="relative h-screen min-h-[800px] flex flex-col hero-wrapper">
+        <!-- Background - Ace Navy -->
+        <div class="absolute inset-0 z-0 bg-[#0f172a]">
+            <!-- Subtle Gradient for depth (Optional based on previous design) -->
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
+        </div>
+
+        <!-- Navigation: Exact Reference Match -->
+        <nav class="relative z-50 flex items-center justify-between px-8 md:px-16 py-8">
+            <div class="flex items-center space-x-3">
+                <!-- Logo Mark -->
+                <img src="ace-p-logo-m-2.png" alt="Ace Pelizon Logo" class="w-20 h-auto object-contain">
+                <div class="flex flex-col">
+                    <span class="font-serif text-2xl font-bold tracking-tight text-white leading-none">ACE
+                        PELIZON</span>
+                    <span class="text-xs uppercase tracking-widest text-slate-400 font-medium">Plumbing • Heating •
+                        Cooling</span>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center space-x-10">
+                <a href="#services"
+                    class="nav-link text-sm font-bold uppercase tracking-widest text-white hover:text-fleet-yellow transition-colors duration-300">Services</a>
+                <a href="#legacy"
+                    class="nav-link text-sm font-bold uppercase tracking-widest text-white hover:text-fleet-yellow transition-colors duration-300">Our
+                    Story</a>
+                <a href="#testimonials"
+                    class="nav-link text-sm font-bold uppercase tracking-widest text-white hover:text-fleet-yellow transition-colors duration-300">Reviews</a>
+            </div>
+            <a href="tel:626-331-0701"
+                class="bg-fleet-yellow text-ace-navy font-bold py-3 px-6 rounded-full hover:bg-yellow-400 transition-all duration-300 shadow-xl hidden md:block">
+                (626) 331-0701
+            </a>
+        </nav>
+
+        <!-- Cinematic Curtain -->
+        <div id="intro-curtain"
+            class="fixed inset-0 z-[100] bg-ace-navy flex flex-col items-center justify-center transition-transform duration-[1500ms] ease-in-out">
+            <div class="overflow-hidden relative z-10 px-8 text-center">
+                <h1
+                    class="text-6xl md:text-8xl font-merriweather font-black text-white tracking-tight transform translate-y-full animate-reveal-up">
+                    ACE PELIZON
+                </h1>
+            </div>
+            <div
+                class="h-1 bg-fleet-yellow mt-6 animate-expand-line w-full max-w-2xl origin-left rounded-full shadow-[0_0_20px_#ffcc00]">
+            </div>
+            <div class="mt-4 overflow-hidden relative z-10">
+                <p class="text-heritage-blue font-mono tracking-[0.5em] text-sm md:text-base uppercase transform translate-y-full animate-reveal-up px-8"
+                    style="animation-delay: 0.4s;">
+                    Precision Plumbing // Since 1957
+                </p>
+            </div>
+        </div>
+
+        <!-- Hero Content Grid -->
+        <!-- Hero Content Grid -->
+        <div
+            class="relative z-10 flex-grow grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-8 md:px-16 mt-0 hero-content-grid">
+
+            <!-- Left: Text Content -->
+            <div class="flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
+                <!-- Accent Line -->
+                <div class="flex items-center space-x-4 mb-8">
+                    <div class="h-[3px] w-12 bg-fleet-yellow"></div>
+                    <span class="text-fleet-yellow font-bold tracking-[0.2em] uppercase text-sm font-sans">Est.
+                        1957</span>
+                </div>
+
+                <!-- Main Heading -->
+                <h1 class="font-sans text-6xl md:text-8xl font-bold leading-none mb-8 tracking-tight hero-headline">
+                    <span class="text-white block">LEGACY</span>
+                    <span class="text-fleet-yellow block mt-2">MEETS INNOVATION</span>
+                </h1>
+
+                <!-- Subheading -->
+                <p class="text-xl text-slate-300 mb-12 max-w-lg leading-relaxed font-light">
+                    Three generations of world-class plumbing mastery. Engineering peace of mind for the finest homes in
+                    West Covina.
+                </p>
+
+                <!-- Buttons -->
+                <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6 hero-buttons">
+                    <a href="#contact"
+                        class="px-10 py-4 bg-fleet-yellow text-ace-navy font-bold tracking-wider uppercase text-sm hover:translate-y-[-2px] transition-transform rounded-sm shadow-glow inline-block text-center">
+                        Schedule Service
+                    </a>
+                    <!-- 'Our History': Transparent with Yellow Border/Text -->
+                    <a href="#legacy"
+                        class="px-10 py-4 bg-transparent border-2 border-fleet-yellow text-fleet-yellow font-bold tracking-wider uppercase text-sm hover:bg-fleet-yellow/10 transition-colors rounded-sm text-center">
+                        Our History
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right: 3D Floating Card -->
+            <div class="flex justify-center items-center perspective-container h-full relative hero-card-container">
+                <!-- Static Glow -->
+                <div class="card-glow"></div>
+
+                <!-- Double-Sided 3D Card -->
+                <div class="floating-card">
+                    <!-- Front Face: Water Ace -->
+                    <div class="card-face card-front">
+                        <img src="ace_logo_transparent.png" alt="Ace Pelizon Plumbing Logo"
+                            class="w-full h-full object-contain" style="transform: scale(1.21) translate(-5px, 6px);">
+                    </div>
+                    <!-- Back Face: Tools Ace -->
+                    <div class="card-face card-back">
+                        <img src="ace_logo_transparent.png" alt="Ace Pelizon Plumbing Logo"
+                            class="w-full h-full object-contain"
+                            style="transform: scale(1.21) translate(5px, 6px) scaleX(-1);">
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Close Hero Content Grid -->
+    </div> <!-- Close Main Hero Wrapper -->
+
+    <!-- TRUST BAR SECTION -->
+    <section class="bg-ace-navy border-b border-white/5 py-8 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-around items-center gap-8 md:gap-0">
+
+                <!-- Google Rating -->
+                <div class="flex flex-col items-center justify-center p-4 h-[100px] w-[200px]">
+                    <div class="flex items-center gap-3 mb-1 h-[45px]">
+                        <!-- Google Logo (Multi-color) -->
+                        <svg class="h-full w-auto" viewBox="0 0 24 24">
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                fill="#4285F4" />
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                fill="#34A853" />
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                fill="#FBBC05" />
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                fill="#EA4335" />
+                        </svg>
+                        <span class="text-3xl font-bold font-serif text-white">4.9</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="flex gap-1 text-fleet-yellow text-xs mb-1">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-gray-300 font-medium tracking-wide text-sm">295+ Reviews</p>
+                    </div>
+                </div>
+
+                <!-- Yelp Rating -->
+                <div class="flex flex-col items-center justify-center p-4 h-[100px] w-[200px]">
+                    <div class="flex items-center gap-3 mb-1 h-[45px]">
+                        <!-- Yelp Logo (PNG) -->
+                        <!-- Yelp Logo (Modern Burst - Official SVG) -->
+                        <!-- Yelp Logo (Modern Burst - Inline SVG) -->
+                        <!-- Yelp Logo (Modern Burst - Inline SVG - Official Transparent) -->
+                        <svg role="img" viewBox="0 0 512 512" class="h-full w-auto text-[#d32323]"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <title>Yelp</title>
+                            <path
+                                d="M248.32,74.24c-1.28-4.69-5.12-8.11-10.24-9.81-16.21-4.27-79.36,13.65-90.88,26-3.84,3.84-5.12,9-3.84,13.23,1.71,3.84,79.79,128.43,79.79,128.43,11.52,18.77,20.9,16.21,23.89,14.93,3-.85,12.37-3.84,11.52-26C256.85,195,249.17,79.79,248.32,74.24ZM214.61,308.05c6.4-1.7,10.67-7.68,11.1-14.93.42-7.68-3.42-14.51-9.82-17.07L198,268.8c-61-25.6-63.57-26.45-66.56-26.45-4.69-.43-9,2.13-11.94,6.82-6,9.82-8.54,41.39-6.4,62.3.85,6.82,2.13,12.8,3.84,16.21,2.56,4.69,6.4,7.68,11.09,7.68,3,0,4.69-.43,61.44-18.77Zm32,23.47c-6.82-3-14.5-1.28-18.77,4.27l-12.37,14.93c-42.67,51.2-44.38,53.33-45.66,56.32a12.66,12.66,0,0,0-.85,5.55,11.5,11.5,0,0,0,3.41,7.68c9.82,11.94,57.18,29.86,72.54,27.3A13.06,13.06,0,0,0,255.57,439c.86-3,1.28-5.12,1.28-65.28V346.45C257.71,340.05,253.44,334.08,246.61,331.52Zm148.48,12c-2.56-1.71-4.26-2.56-61-21.34,0,0-24.75-8.53-25.17-8.53-6-2.56-12.8-.43-17.5,5.55s-5.54,13.65-1.7,19.62l9.81,16.64c33.71,55.47,36.27,59.31,38.4,61.44,3.84,3,8.53,3.42,13.65,1.28,14.51-6,45.66-46.08,47.79-61.86C400.21,351.15,398.93,346.45,395.09,343.47Zm-91.3-63.15c9-1.71,82.34-19.2,88.32-23.47,3.84-2.56,6-7.25,5.54-12.8v-.42c-1.7-16.22-29.44-58-43.09-64.86-4.69-2.13-9.81-2.13-13.65.43-2.56,1.71-4.27,4.27-38.83,52.05L286.29,253c-4.26,5.12-4.26,12.38,0,18.78C290.56,278.61,294.83,282,303.79,280.32Z"
+                                fill="#d32323" />
+                        </svg>
+                        <span class="text-3xl font-bold font-serif text-white">4.0</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="flex gap-1 text-[#d32323] text-xs mb-1">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star text-white/20"></i>
+                        </div>
+                        <p class="text-gray-300 font-medium tracking-wide text-sm">95+ Reviews</p>
+                    </div>
+                </div>
+
+                <!-- BBB Rating -->
+                <!-- BBB Rating -->
+                <div class="flex flex-row items-center justify-center p-4 gap-4 h-[100px] w-auto">
+                    <div class="h-16 w-auto flex-shrink-0">
+                        <!-- BBB Logo (SVG - Official Teal) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 562 961.27728" class="h-full w-auto"
+                            style="fill:#005f86;">
+                            <path
+                                d="M 438.82309,541.63751 H 122.78223 l -11.44575,37.79071 h 84.26441 l 15.98458,52.0979 h 138.43438 l 16.08325,-52.0979 h 84.16574 z M 174.38678,329.49644 c -24.21078,33.38046 -16.79065,80.06548 16.5766,104.29447 l 75.6801,54.95934 c 8.40139,6.05364 10.26194,17.79282 4.14415,26.14762 l 11.34708,8.18963 39.96146,-55.05801 c 9.27836,-12.68718 14.28817,-27.99303 14.30718,-43.71092 -0.0345,-3.99857 -0.36429,-7.98913 -0.9867,-11.93911 -3.02182,-19.52693 -13.66772,-37.05719 -29.60108,-48.74311 l -75.58142,-54.86066 c -4.20569,-2.8155 -7.06201,-7.2428 -7.89362,-12.23512 -0.0987,-0.9867 -0.0987,-1.9734 0,-2.9601 0.0257,-3.92987 1.26633,-7.75559 3.55213,-10.9524 l -11.34708,-8.28831 z m 45.58566,-220.82405 c -13.40338,18.40159 -20.6237,40.58079 -20.62208,63.34631 -0.0296,5.78208 0.43415,11.56416 1.38138,17.2673 4.41172,28.39377 20.01208,53.83763 43.31625,70.64791 l 95.11813,69.06918 c 12.46002,9.0002 20.80787,22.60543 23.18751,37.79071 0.50618,3.06616 0.77012,6.16742 0.78936,9.27501 -0.0483,12.14552 -3.95229,23.96193 -11.14974,33.74523 l 9.17634,6.6109 74.89073,-103.5051 C 471.02906,264.44314 460.2148,196.82441 411.88611,161.65832 L 297.13259,78.281951 c -7.17549,-5.19686 -11.97238,-13.04955 -13.32049,-21.80613 -1.46339,-8.74763 0.67179,-17.71533 5.92022,-24.8649 l -9.07767,-6.61091 z M 25.78936,663.1006 h 86.63249 c 17.789,-1.18103 35.31967,4.74532 48.74311,16.47794 8.4291,8.35068 13.03501,19.81189 12.72847,31.67315 v 0.59203 c 0.47766,17.0409 -9.10688,32.77041 -24.47023,40.15879 21.51012,8.2883 34.83061,20.81943 34.83061,45.88168 0,34.13991 -27.62768,51.20986 -69.75988,51.20986 H 25.69069 Z m 78.14685,75.38409 c 18.05666,0 29.60108,-5.92022 29.60108,-19.73406 0,-12.33378 -9.86703,-19.73405 -26.93698,-19.73405 H 65.75082 v 39.46811 z m 10.85373,75.08807 c 18.15533,0 29.00906,-6.41357 29.00906,-19.73406 v -0.59202 c 0,-12.43245 -9.27501,-19.73405 -30.29177,-19.73405 H 65.75082 v 41.04683 z M 202.60648,663.1006 h 86.63249 c 17.78899,-1.18103 35.31966,4.74532 48.74311,16.47794 8.39292,8.36738 12.96228,19.82649 12.62979,31.67315 v 0.59203 c 0.47766,17.0409 -9.10688,32.77041 -24.47022,40.15879 21.60878,8.2883 34.92927,20.81943 34.92927,45.88168 0,34.13991 -27.72634,51.20986 -69.85855,51.20986 h -88.60589 z m 77.85083,75.38409 c 18.05666,0 29.60108,-5.92022 29.60108,-19.73406 0,-12.33378 -9.86702,-19.73405 -26.83831,-19.73405 h -41.1455 v 39.46811 z m 10.85373,75.08807 c 18.15533,0 29.00906,-6.41357 29.00906,-19.73406 v -0.59202 c 0,-12.43245 -9.27501,-19.73405 -30.29177,-19.73405 h -47.95375 v 41.04683 z M 378.43689,663.1006 h 86.63249 c 17.78899,-1.18103 35.31966,4.74532 48.74311,16.47794 8.42909,8.35068 13.035,19.81189 12.72846,31.67315 v 0.59203 c 0.47766,17.0409 -9.10688,32.77041 -24.47022,40.15879 21.60878,8.2883 34.92927,20.81943 34.92927,45.88168 0,34.13991 -27.72634,51.20986 -69.85855,51.20986 h -88.80323 z m 77.85083,75.38409 c 18.05666,0 29.60108,-5.92022 29.60108,-19.73406 0,-12.33378 -9.86702,-19.73405 -26.83831,-19.73405 h -40.65215 v 39.46811 z m 10.85373,75.08807 c 18.15533,0 29.10773,-6.41357 29.10773,-19.73406 v -0.59202 c 0,-12.43245 -9.37367,-19.73405 -30.39044,-19.73405 h -47.4604 v 41.04683 z M 25,928.81963 l 3.25612,-3.74947 c 4.39964,4.27772 10.34408,6.59143 16.47793,6.41356 6.3149,0 10.55772,-3.25612 10.55772,-7.69628 0,-4.24282 -2.36809,-6.61091 -12.33378,-8.68298 -9.9657,-2.07208 -15.78724,-5.72288 -15.78724,-13.22182 0.66708,-7.8189 7.70551,-13.51242 15.49123,-12.53112 6.02325,-0.18747 11.91102,1.81014 16.5766,5.62421 l -3.15745,3.94681 c -3.75203,-3.51636 -8.67266,-5.51976 -13.81383,-5.62421 -6.11756,0 -9.86703,3.25612 -9.86703,7.40027 0,4.34149 2.46676,6.80825 12.82713,8.97899 10.36038,2.17075 15.2939,5.92022 15.2939,12.92581 0,7.89362 -6.70958,13.02447 -16.08326,13.02447 C 37.32638,935.92825 30.37002,933.49175 25,928.81963 Z m 45.09231,-2.26942 v -20.42474 h -4.83484 v -4.44017 h 4.83484 v -9.86702 h 5.13085 v 9.86702 h 11.05107 v 4.44017 H 75.22316 v 19.73405 c 0,4.14415 2.36809,5.6242 5.92022,5.6242 1.75005,0.0326 3.48029,-0.37455 5.03218,-1.18404 v 4.34149 c -1.90607,1.03087 -4.05011,1.54135 -6.21622,1.48006 -5.6017,0.72542 -10.42153,-3.94983 -9.86703,-9.57102 z m 20.72076,-0.88803 c 0,-7.10426 6.01888,-10.9524 14.89921,-10.9524 3.60619,-0.0434 7.1984,0.45595 10.65638,1.48005 v -1.18404 c 0,-6.11756 -3.84814,-9.27501 -9.86702,-9.27501 -3.66702,0.0533 -7.27519,0.92997 -10.55772,2.56543 l -1.87474,-4.24282 c 3.97722,-1.88855 8.32564,-2.86611 12.72847,-2.86144 4.09421,-0.25911 8.12852,1.08564 11.24841,3.74947 2.46676,2.67397 3.74947,6.23596 3.55213,9.86703 v 20.72075 h -5.22953 v -5.13085 c -2.99152,3.7959 -7.60125,5.95442 -12.43245,5.82155 -6.61091,0 -13.12314,-3.45346 -13.12314,-10.55772 z m 25.65426,-2.76277 v -3.25612 c -3.20093,-0.9643 -6.52403,-1.46278 -9.86702,-1.48005 -6.51224,0 -9.86703,2.76276 -9.86703,7.00559 0,4.34149 4.04548,6.80824 8.78166,6.80824 5.46328,0.3049 10.23821,-3.65268 10.95239,-9.07766 z m 13.91251,-21.21411 h 5.22953 v 8.88033 c 2.05801,-6.00675 7.76162,-9.99529 14.10984,-9.86703 v 5.42687 c -8.32632,-0.0701 -14.79373,7.23477 -13.71516,15.49123 v 13.51782 h -5.22953 z m 27.03565,24.86491 v -20.42474 h -4.83484 v -4.44017 h 4.83484 v -9.86702 h 5.72288 v 9.86702 h 11.05107 v 4.44017 h -11.05107 v 19.73405 c 0,4.14415 2.36809,5.6242 5.82155,5.6242 1.75004,0.0326 3.48028,-0.37455 5.03218,-1.18404 v 4.34149 c -1.90608,1.03087 -4.05011,1.54135 -6.21623,1.48006 -5.78982,1.09324 -10.99232,-3.71288 -10.36038,-9.57102 z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-col items-start">
+                        <p class="text-white font-bold tracking-wide text-3xl leading-none">A+</p>
+                        <p class="text-gray-300 font-medium tracking-wide text-xs">Accredited</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- History Section -->
+    <section id="legacy" class="py-20 md:py-32 bg-white overflow-hidden text-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Image Grid -->
+                <!-- Image Grid -> Transformed to Interactive Time-Shift Parallax -->
+                <div class="relative h-[600px] w-full rounded-2xl overflow-hidden shadow-2xl group select-none">
+                    <img src="vintage-plumbing-1957.jpg" alt="Ace Pelizon Team"
+                        class="absolute inset-0 w-full h-full object-cover">
+                </div>
+
+                <!-- Copy -->
+                <div class="space-y-8">
+                    <div
+                        class="inline-block px-3 py-1 bg-ace-gray text-ace-navy text-xs font-bold uppercase tracking-widest rounded-full">
+                        Since 1957
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-merriweather font-bold text-ace-navy leading-tight">
+                        Honoring Our Roots. <br />
+                        <span class="text-fleet-yellow">Embracing the Future.</span>
+                    </h2>
+                    <div class="space-y-6 text-lg text-slate-600 font-light leading-relaxed">
+                        <p>
+                            In 1957, the San Gabriel Valley was a different place. But one thing has remained
+                            constant:
+                            Ace Pelizon Plumbing. What started as a humble operation has grown into the region's
+                            most respected plumbing authority.
+                        </p>
+                        <p>
+                            We believe that <strong>legacy isn't just about age—it's about consistency.</strong>
+                            For
+                            over six decades,
+                            we've stood by our work, treating every home like our own. While our values are
+                            rooted in
+                            the 50s,
+                            our methods are strictly 21st century.
+                        </p>
+                        <p class="border-l-4 border-fleet-yellow pl-6 italic text-slate-800">
+                            "We don't cut corners. We don't upsell unnecessary fixes. We do the job right, just
+                            like we
+                            have
+                            since the beginning."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-ace-navy text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <!-- Headline Strategy -->
+                <h2 class="text-3xl md:text-5xl font-merriweather font-bold mb-6">Your Winning Hand</h2>
+                <p class="text-slate-300 text-lg">
+                    We combine the problem-solving wisdom of three generations with the cutting-edge technology
+                    of
+                    today.
+                </p>
+            </div>
+
+            <!-- 3D Carousel Container -->
+            <div id="carousel-container" class="mt-8 relative group/container">
+                <!-- Navigation Arrows (Yellow + Glow) -->
+                <button onclick="manualNext('prev')" class="carousel-nav-arrow left-[-16px] md:left-8 group/arrow">
+                    <div
+                        class="w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 group-hover/arrow:bg-white/10 group-hover/arrow:backdrop-blur-sm group-hover/arrow:shadow-[0_0_30px_rgba(255,204,0,0.6)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor"
+                            class="w-8 h-8 text-fleet-yellow drop-shadow-[0_0_8px_rgba(255,204,0,0.5)] transition-transform duration-300 group-hover/arrow:scale-110">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </div>
+                </button>
+                <button onclick="manualNext('next')" class="carousel-nav-arrow right-[-16px] md:right-8 group/arrow">
+                    <div
+                        class="w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 group-hover/arrow:bg-white/10 group-hover/arrow:backdrop-blur-sm group-hover/arrow:shadow-[0_0_30px_rgba(255,204,0,0.6)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor"
+                            class="w-8 h-8 text-fleet-yellow drop-shadow-[0_0_8px_rgba(255,204,0,0.5)] transition-transform duration-300 group-hover/arrow:scale-110">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+                </button>
+
+                <!-- Cards -->
+
+                <!-- Card 1: Smart Leak Detection -->
+                <div class="carousel-card" onclick="setCarousel(0)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="ace-back-newer.png" alt="Card Back" class="w-full h-full object-fill">
+                        </div>
+                        <div class="flip-card-back">
+                            <!-- Icon (Yellow) -->
+                            <svg class="w-16 h-16 text-fleet-yellow mb-4 mx-auto" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                <circle cx="10.5" cy="10.5" r="2.5" class="fill-fleet-yellow/20" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M10.5 5.5v2m0 6v2m-5-5h2m6 0h2" class="opacity-50" />
+                            </svg>
+                            <h3 class="text-3xl font-black text-black mb-4 font-sans uppercase tracking-tight">
+                                Smart
+                                Leak<br>Detection</h3>
+                            <p class="text-black text-lg font-sans font-medium leading-relaxed">
+                                Advanced acoustic/thermal imaging to find leaks without tearing up walls.
+                            </p>
+                            <div class="mt-6 w-12 h-1 bg-black mx-auto"></div>
+
+                            <!-- X-Ray Overlay -->
+                            <div class="x-ray-overlay absolute inset-0 z-20 pointer-events-none opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
+                                style="background: #1e3a8a; mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%); -webkit-mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%);">
+                                <div class="absolute inset-0 blueprint-grid opacity-20"></div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                                    <div
+                                        class="text-fleet-yellow font-mono text-xs tracking-widest mb-2 border-b border-fleet-yellow/30 pb-1">
+                                        SCHEMATIC_VIEW_01</div>
+                                    <p class="text-white font-mono text-xs leading-relaxed opacity-80">
+                                        Detecting moisture variance > 0.05% <br>
+                                        Thermal Mapping: ACTIVE <br>
+                                        Sensor Array: ONLINE
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Hydro Jetting -->
+                <div class="carousel-card" onclick="setCarousel(1)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="ace-back-newer.png" alt="Card Back" class="w-full h-full object-fill">
+                        </div>
+                        <div class="flip-card-back">
+                            <!-- Icon (Yellow) -->
+                            <svg class="w-16 h-16 text-fleet-yellow mb-4 mx-auto" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M15.5 12a3.5 3.5 0 11-7 0 3.5 3.5 0 017 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M19 12h2M3 12h2.5" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M12 5.5V3M12 21v-2.5" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 12l6 6m-6-6l6-6m-6 6l-6 6m6-6l-6-6" class="opacity-30" />
+                            </svg>
+                            <h3 class="text-3xl font-black text-black mb-4 font-sans uppercase tracking-tight">
+                                Hydro<br>Jetting</h3>
+                            <p class="text-black text-lg font-sans font-medium leading-relaxed">
+                                High-pressure innovation to clear years of buildup, restoring pipes.
+                            </p>
+                            <div class="mt-6 w-12 h-1 bg-black mx-auto"></div>
+
+                            <!-- X-Ray Overlay -->
+                            <div class="x-ray-overlay absolute inset-0 z-20 pointer-events-none opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
+                                style="background: #1e3a8a; mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%); -webkit-mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%);">
+                                <div class="absolute inset-0 blueprint-grid opacity-20"></div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                                    <div
+                                        class="text-fleet-yellow font-mono text-xs tracking-widest mb-2 border-b border-fleet-yellow/30 pb-1">
+                                        SCHEMATIC_VIEW_01</div>
+                                    <p class="text-white font-mono text-xs leading-relaxed opacity-80">
+                                        Detecting moisture variance > 0.05% <br>
+                                        Thermal Mapping: ACTIVE <br>
+                                        Sensor Array: ONLINE
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Trenchless Repair -->
+                <div class="carousel-card" onclick="setCarousel(2)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="ace-back-newer.png" alt="Card Back" class="w-full h-full object-fill">
+                        </div>
+                        <div class="flip-card-back">
+                            <!-- Icon (Yellow) -->
+                            <svg class="w-16 h-16 text-fleet-yellow mb-4 mx-auto" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M3 6h18M3 9h18" class="opacity-30" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.25 15h19.5" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M6 13.5v3M18 13.5v3M12 13.5v3" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M14 11l2-2m-2 2l-2-2" />
+                            </svg>
+                            <h3 class="text-3xl font-black text-black mb-4 font-sans uppercase tracking-tight">
+                                Trenchless<br>Repair</h3>
+                            <p class="text-black text-lg font-sans font-medium leading-relaxed">
+                                Fixing underground lines with minimal excavation. Saving your lawn.
+                            </p>
+                            <div class="mt-6 w-12 h-1 bg-black mx-auto"></div>
+
+                            <!-- X-Ray Overlay -->
+                            <div class="x-ray-overlay absolute inset-0 z-20 pointer-events-none opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
+                                style="background: #1e3a8a; mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%); -webkit-mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%);">
+                                <div class="absolute inset-0 blueprint-grid opacity-20"></div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                                    <div
+                                        class="text-fleet-yellow font-mono text-xs tracking-widest mb-2 border-b border-fleet-yellow/30 pb-1">
+                                        SCHEMATIC_VIEW_01</div>
+                                    <p class="text-white font-mono text-xs leading-relaxed opacity-80">
+                                        Detecting moisture variance > 0.05% <br>
+                                        Thermal Mapping: ACTIVE <br>
+                                        Sensor Array: ONLINE
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Tankless Heaters -->
+                <div class="carousel-card" onclick="setCarousel(3)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="ace-back-newer.png" alt="Card Back" class="w-full h-full object-fill">
+                        </div>
+                        <div class="flip-card-back">
+                            <!-- Icon (Yellow) -->
+                            <svg class="w-16 h-16 text-fleet-yellow mb-4 mx-auto" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M6 3h12a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M12 16.5c1.5 0 2.5-1.5 2.5-3s-1.5-2.5-2.5-4c-1 1.5-2.5 2.5-2.5 4s1 3 2.5 3z"
+                                    class="fill-fleet-yellow/10" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M16 7h-2M10 7H8" />
+                            </svg>
+                            <h3 class="text-3xl font-black text-black mb-4 font-sans uppercase tracking-tight">
+                                Tankless<br>Heaters</h3>
+                            <p class="text-black text-lg font-sans font-medium leading-relaxed">
+                                Energy-efficient, on-demand hot water systems installed with precision.
+                            </p>
+                            <div class="mt-6 w-12 h-1 bg-black mx-auto"></div>
+
+                            <!-- X-Ray Overlay -->
+                            <div class="x-ray-overlay absolute inset-0 z-20 pointer-events-none opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
+                                style="background: #1e3a8a; mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%); -webkit-mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%);">
+                                <div class="absolute inset-0 blueprint-grid opacity-20"></div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                                    <div
+                                        class="text-fleet-yellow font-mono text-xs tracking-widest mb-2 border-b border-fleet-yellow/30 pb-1">
+                                        SCHEMATIC_VIEW_01</div>
+                                    <p class="text-white font-mono text-xs leading-relaxed opacity-80">
+                                        Detecting moisture variance > 0.05% <br>
+                                        Thermal Mapping: ACTIVE <br>
+                                        Sensor Array: ONLINE
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Whole Home Repiping -->
+                <div class="carousel-card" onclick="setCarousel(4)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="ace-back-newer.png" alt="Card Back" class="w-full h-full object-fill">
+                        </div>
+                        <div class="flip-card-back">
+                            <!-- Icon (Yellow) -->
+                            <svg class="w-16 h-16 text-fleet-yellow mb-4 mx-auto" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                            </svg>
+                            <h3 class="text-3xl font-black text-black mb-4 font-sans uppercase tracking-tight">
+                                Whole
+                                Home<br>Repiping</h3>
+                            <p class="text-black text-lg font-sans font-medium leading-relaxed">
+                                Replace aging galvanized pipes with modern PEX or copper.
+                            </p>
+                            <div class="mt-6 w-12 h-1 bg-black mx-auto"></div>
+
+                            <!-- X-Ray Overlay -->
+                            <div class="x-ray-overlay absolute inset-0 z-20 pointer-events-none opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
+                                style="background: #1e3a8a; mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%); -webkit-mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%);">
+                                <div class="absolute inset-0 blueprint-grid opacity-20"></div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                                    <div
+                                        class="text-fleet-yellow font-mono text-xs tracking-widest mb-2 border-b border-fleet-yellow/30 pb-1">
+                                        SCHEMATIC_VIEW_01</div>
+                                    <p class="text-white font-mono text-xs leading-relaxed opacity-80">
+                                        Detecting moisture variance > 0.05% <br>
+                                        Thermal Mapping: ACTIVE <br>
+                                        Sensor Array: ONLINE
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6: Precision Fixtures -->
+                <div class="carousel-card" onclick="setCarousel(5)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="ace-back-newer.png" alt="Card Back" class="w-full h-full object-fill">
+                        </div>
+                        <div class="flip-card-back">
+                            <!-- Icon (Yellow) -->
+                            <svg class="w-16 h-16 text-fleet-yellow mb-4 mx-auto" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M8 12h8m-8 0l-2-2m10 2l2-2m-2-2V6a2 2 0 00-2-2H8a2 2 0 00-2 2v4m8 0H8m-2 6v2a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                            </svg>
+                            <h3 class="text-3xl font-black text-black mb-4 font-sans uppercase tracking-tight">
+                                Precision<br>Fixtures</h3>
+                            <p class="text-black text-lg font-sans font-medium leading-relaxed">
+                                Installation of high-end, water-saving fixtures. Aesthetics & Function.
+                            </p>
+                            <div class="mt-6 w-12 h-1 bg-black mx-auto"></div>
+
+                            <!-- X-Ray Overlay -->
+                            <div class="x-ray-overlay absolute inset-0 z-20 pointer-events-none opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
+                                style="background: #1e3a8a; mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%); -webkit-mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%);">
+                                <div class="absolute inset-0 blueprint-grid opacity-20"></div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                                    <div
+                                        class="text-fleet-yellow font-mono text-xs tracking-widest mb-2 border-b border-fleet-yellow/30 pb-1">
+                                        SCHEMATIC_VIEW_01</div>
+                                    <p class="text-white font-mono text-xs leading-relaxed opacity-80">
+                                        Detecting moisture variance > 0.05% <br>
+                                        Thermal Mapping: ACTIVE <br>
+                                        Sensor Array: ONLINE
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                /* Motion Refinement: Heavy Mechanical Feel */
+                .carousel-card {
+                    /* Original styling from head included default ease, we override here */
+                    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                }
+
+                .carousel-nav-arrow {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    z-index: 50;
+                    cursor: pointer;
+                }
+
+                @media (max-width: 768px) {
+                    .carousel-card {
+                        width: 80% !important;
+                        height: 60vh !important;
+                    }
+                }
+
+                /* Tighter Flanks */
+                .state-left {
+                    z-index: 10;
+                    transform: translate(-130%, -50%) scale(0.8) rotateY(45deg) !important;
+                }
+
+                .state-right {
+                    z-index: 10;
+                    transform: translate(30%, -50%) scale(0.8) rotateY(-45deg) !important;
+                }
+
+                /* Ghost Deck Removed */
+                .state-hidden {
+                    z-index: 0;
+                    transform: translate(-50%, -50%) scale(0.7) translateZ(-200px) !important;
+                    opacity: 0 !important;
+                    pointer-events: none;
+                }
+
+                /* Active Pop: Scale & Bloom */
+                .state-active {
+                    /* Centered, Flipped, Scaled up slightly */
+                    transform: translate(-50%, -50%) scale(1.05) rotateY(0deg) !important;
+                    z-index: 30 !important;
+                }
+
+                .state-active .flip-card-inner {
+                    box-shadow: 0 0 30px rgba(255, 204, 0, 0.3) !important;
+                    /* Yellow Bloom (Pulse) */
+                    animation: pulse-glow 2s infinite;
+                }
+
+                @keyframes pulse-glow {
+                    0% {
+                        box-shadow: 0 0 30px rgba(255, 204, 0, 0.3);
+                    }
+
+                    50% {
+                        box-shadow: 0 0 50px rgba(255, 204, 0, 0.6);
+                    }
+
+                    100% {
+                        box-shadow: 0 0 30px rgba(255, 204, 0, 0.3);
+                    }
+                }
+
+                /* --- REVIEW DECK STYLES --- */
+                .review-deck-container {
+                    perspective: 1000px;
+                    height: 500px;
+                    width: 100%;
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .review-card {
+                    position: absolute;
+                    width: 90%;
+                    max-width: 400px;
+                    height: 300px;
+                    background: white;
+                    border-radius: 1.5rem;
+                    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
+                    padding: 2rem;
+                    transform-origin: center bottom;
+                    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s, box-shadow 0.3s;
+                    cursor: pointer;
+                    user-select: none;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    will-change: transform, opacity;
+                    border: 1px solid rgba(0, 0, 0, 0.05);
+                }
+
+                /* Suit Icon (Top Right) */
+                .suit-icon {
+                    position: absolute;
+                    top: 1.5rem;
+                    right: 1.5rem;
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    color: #ffcc00;
+                }
+
+                /* Mobile Stack (Default) */
+                .review-card {
+                    z-index: 1;
+                    transform: scale(0.9) translateY(20px);
+                    opacity: 0;
+                    pointer-events: none;
+                }
+
+                /* Visible top card on mobile */
+                .review-card.mobile-active {
+                    z-index: 10;
+                    opacity: 1;
+                    transform: scale(1) translateY(0);
+                    pointer-events: auto;
+                }
+
+                /* Next card peeking on mobile */
+                /* Stack 1: Peeking out bottom */
+                .review-card.mobile-stack-1 {
+                    z-index: 5;
+                    opacity: 1;
+                    /* Keep visible */
+                    transform: scale(0.95) translateY(15px);
+                    /* Push down to show bottom */
+                }
+
+                /* Stack 2: Peeking out further */
+                .review-card.mobile-stack-2 {
+                    z-index: 4;
+                    opacity: 0.8;
+                    /* Slight fade for depth */
+                    transform: scale(0.90) translateY(30px);
+                    /* Push down more */
+                    pointer-events: none;
+                }
+
+                /* HIDE CONTENT inside stacked cards for clean "Solitaire" look */
+                .review-card.mobile-stack-1>*,
+                .review-card.mobile-stack-2>* {
+                    opacity: 0;
+                    transition: opacity 0.2s;
+                    /* Smooth transition when becoming active */
+                }
+
+                /* Desktop Deal Animation (Only > 768px) */
+                @media (min-width: 768px) {
+
+                    /* Initial Stacked State */
+                    .review-card {
+                        opacity: 0;
+                        transform: scale(0.8) translateY(50px);
+                        pointer-events: none;
+                    }
+
+                    /* When Dealt */
+                    .deck-dealt .review-card.pos-center {
+                        z-index: 30;
+                        opacity: 1;
+                        transform: translateX(0) rotate(0deg) scale(1);
+                        pointer-events: auto;
+                        box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.3);
+                    }
+
+                    .deck-dealt .review-card.pos-left {
+                        z-index: 20;
+                        opacity: 0.8;
+                        transform: translateX(-140px) rotate(-6deg) scale(0.9);
+                        pointer-events: auto;
+                        cursor: pointer;
+                    }
+
+                    .deck-dealt .review-card.pos-left:hover {
+                        transform: translateX(-150px) rotate(-8deg) scale(0.92);
+                        z-index: 25;
+                    }
+
+                    .deck-dealt .review-card.pos-right {
+                        z-index: 20;
+                        opacity: 0.8;
+                        transform: translateX(140px) rotate(6deg) scale(0.9);
+                        pointer-events: auto;
+                        cursor: pointer;
+                    }
+
+                    .deck-dealt .review-card.pos-right:hover {
+                        transform: translateX(150px) rotate(8deg) scale(0.92);
+                        z-index: 25;
+                    }
+
+                    .deck-dealt .review-card.pos-back {
+                        z-index: 5;
+                        opacity: 0;
+                        transform: translateX(0) scale(0.5);
+                        transition: opacity 0.4s;
+                        /* Quick hide */
+                    }
+                }
+            </style>
+
+            <script>
+                // Cinematic Carousel Logic
+                const cards = document.querySelectorAll('.carousel-card');
+                const container = document.getElementById('carousel-container');
+                let currentIndex = 0;
+                const totalCards = cards.length;
+                let autoplayTimer;
+
+                function updateCarousel() {
+                    cards.forEach((card, index) => {
+                        card.className = 'carousel-card';
+
+                        let relativeIndex = (index - currentIndex + totalCards) % totalCards;
+
+                        if (index === currentIndex) {
+                            card.classList.add('state-active');
+                        } else if (index === (currentIndex + 1) % totalCards) {
+                            card.classList.add('state-right');
+                        } else if (index === (currentIndex - 1 + totalCards) % totalCards) {
+                            card.classList.add('state-left');
+                        } else {
+                            card.classList.add('state-hidden');
+                        }
+                    });
+                }
+
+                function nextCard() {
+                    currentIndex = (currentIndex + 1) % totalCards;
+                    updateCarousel();
+                }
+
+                function prevCard() {
+                    currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+                    updateCarousel();
+                }
+
+                // Manual Interaction Wrapper
+                window.manualNext = (direction) => {
+                    stopAutoplay();
+                    if (direction === 'next') nextCard();
+                    else prevCard();
+                    startAutoplay(); // Restart timer after interaction
+                }
+
+                window.setCarousel = (index) => {
+                    stopAutoplay();
+                    currentIndex = index;
+                    updateCarousel();
+                    startAutoplay();
+                }
+
+                // Autoplay Logic
+                function startAutoplay() {
+                    clearInterval(autoplayTimer);
+                    autoplayTimer = setInterval(nextCard, 5000);
+                }
+
+                function stopAutoplay() {
+                    clearInterval(autoplayTimer);
+                }
+
+                // Initialize
+                updateCarousel();
+                startAutoplay();
+
+                // Hover Pause
+                container.addEventListener('mouseenter', stopAutoplay);
+                container.addEventListener('mouseleave', startAutoplay);
+
+                // Keyboard Navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowRight') {
+                        manualNext('next');
+                    } else if (e.key === 'ArrowLeft') {
+                        manualNext('prev');
+                    }
+                });
+
+                // --- REVIEW DECK LOGIC ---
+                document.addEventListener('DOMContentLoaded', () => {
+                    const deckContainer = document.getElementById('review-deck');
+                    const reviewCards = document.querySelectorAll('.review-card');
+                    const totalReviews = reviewCards.length;
+                    let currentReviewIndex = 0;
+                    let isMobile = window.innerWidth < 768;
+
+                    // Initialize states
+                    function updateReviewDeck() {
+                        isMobile = window.innerWidth < 768;
+
+                        reviewCards.forEach((card, index) => {
+                            // Reset classes
+                            card.className = 'review-card';
+
+                            // Desktop Logic
+                            if (!isMobile) {
+                                let diff = (index - currentReviewIndex + totalReviews) % totalReviews;
+
+                                if (index === currentReviewIndex) {
+                                    card.classList.add('pos-center');
+                                } else if (index === (currentReviewIndex + 1) % totalReviews) {
+                                    card.classList.add('pos-right');
+                                } else if (index === (currentReviewIndex - 1 + totalReviews) % totalReviews) {
+                                    card.classList.add('pos-left');
+                                } else {
+                                    card.classList.add('pos-back');
+                                }
+                            }
+                            // Mobile Logic (Vertical Stack)
+                            else {
+                                // 0 is active, 1 is next, others hidden
+                                let diff = (index - currentReviewIndex + totalReviews) % totalReviews;
+
+                                if (diff === 0) {
+                                    card.classList.add('mobile-active');
+                                } else if (diff === 1) {
+                                    card.classList.add('mobile-stack-1');
+                                } else if (diff === 2) {
+                                    card.classList.add('mobile-stack-2');
+                                } else {
+                                    // Hidden
+                                }
+                            }
+                        });
+                    }
+
+                    // Shuffle Logic
+                    function shuffleNext() {
+                        currentReviewIndex = (currentReviewIndex + 1) % totalReviews;
+                        updateReviewDeck();
+                    }
+
+                    function shufflePrev() {
+                        currentReviewIndex = (currentReviewIndex - 1 + totalReviews) % totalReviews;
+                        updateReviewDeck();
+                    }
+
+                    // Autoplay Logic for Reviews
+                    let reviewAutoplayTimer;
+
+                    function startReviewAutoplay() {
+                        clearInterval(reviewAutoplayTimer);
+                        reviewAutoplayTimer = setInterval(shuffleNext, 3000);
+                    }
+
+                    function stopReviewAutoplay() {
+                        clearInterval(reviewAutoplayTimer);
+                    }
+
+                    // Click Handlers
+                    reviewCards.forEach(card => {
+                        card.addEventListener('click', () => {
+                            stopReviewAutoplay(); // Stop on interaction
+                            if (card.classList.contains('pos-center') || card.classList.contains('mobile-active')) {
+                                // "Deal" it away (center moves to back/next)
+                                shuffleNext();
+                            } else if (card.classList.contains('pos-right')) {
+                                shuffleNext();
+                            } else if (card.classList.contains('pos-left')) {
+                                shufflePrev();
+                            }
+                            startReviewAutoplay(); // Restart after interaction
+                        });
+                    });
+
+                    // Pause on Hover (Desktop)
+                    deckContainer.addEventListener('mouseenter', stopReviewAutoplay);
+                    deckContainer.addEventListener('mouseleave', startReviewAutoplay);
+
+                    // Keyboard Nav for Reviews
+                    document.addEventListener('keydown', (e) => {
+                        // Only trigger if deck is in view? Or just general
+                        if (e.key === 'ArrowRight') {
+                            // Also trigger review shuffle if we wanted, but might conflict with top carousel
+                            // shuffleNext();
+                        }
+                    });
+
+                    // Intersection Observer for "Deal Out" Animation
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                deckContainer.classList.add('deck-dealt');
+                                updateReviewDeck(); // Force update to apply initial positions with transition
+                                startReviewAutoplay(); // Start when visible
+                            } else {
+                                stopReviewAutoplay(); // Stop when out of view
+                            }
+                        });
+                    }, { threshold: 0.3 });
+
+                    observer.observe(deckContainer);
+
+                    // Resize Listener
+                    window.addEventListener('resize', updateReviewDeck);
+
+                    // Initial call (hidden state)
+                    updateReviewDeck();
+                });
+
+                // --- HERO SCROLL-SYNC 3D ROTATION ---
+                document.addEventListener('scroll', () => {
+                    const heroLogo = document.getElementById('hero-logo-container');
+                    const heroBadge = document.getElementById('hero-badge');
+
+                    if (!heroLogo) return;
+
+                    const scrollY = window.scrollY;
+                    const rotationSpeed = 0.05; // Subtle
+
+                    // Rotate X based on scroll (tilt up/down)
+                    // Rotate Y based on scroll (spin slightly)
+                    const rotateX = scrollY * rotationSpeed;
+                    const rotateY = scrollY * rotationSpeed * 0.5;
+
+                    // Apply Transform
+                    // Maintain the initial animation's float effect? 
+                    // effective transform creates a conflict with CSS animation 'float-spin'.
+                    // We should probably pause the CSS animation or add this to a wrapper?
+                    // The CSS animation is: animation: float-spin 12s infinite linear;
+                    // Overriding transform directly kills the animation.
+                    // STRATEGY: Update Custom Properties or Apply to a Wrapper.
+                    // Let's modify the inline style transform.
+                    // Actually, let's keep it simple: Add a 'scroll-effect' class or modify variable.
+
+                    // Better approach: Apply 3D rotation to the PARENT .hero-card-container or separate wrapper?
+                    // The .floating-card has the animation.
+                    // Let's modify the 'perspective-origin' of the container for a parallax feel
+                    // OR apply transforms to the Card Glow/Badge.
+
+                    // User Request: "apply a subtle rotateX and rotateY 3D transform to... spinning logo container"
+                    // Doing this via JS while CSS animation runs is tricky.
+                    // Let's apply it to the .perspective-container itself? No, that affects everything.
+                    // Let's apply it to the .hero-card-container
+
+                    const container = document.querySelector('.hero-card-container');
+                    if (container) {
+                        // container.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                        // This might be too much.
+                    }
+
+                    // Let's just do the Badge Parallax properly here
+                    if (heroBadge) {
+                        // Float 10px higher in Z axis on scroll? 
+                        // "making it float 10px higher in the Z-axis" - this sounds like a static state or scroll-driven?
+                        // "As the user scrolls... Parallax: Decouple... "
+                        // Let's move it UP based on scroll (Classic Parallax)
+                        const dataset = heroBadge.dataset;
+                        const speed = 0.2;
+                        heroBadge.style.transform = `translateZ(50px) translateY(${scrollY * speed * -1}px)`;
+                    }
+                });
+
+                // --- TIME-SHIFT SLIDER LOGIC ---
+                document.addEventListener('DOMContentLoaded', () => {
+                    const wrapper = document.getElementById('time-shift-wrapper');
+                    const overlay = document.getElementById('vintage-overlay');
+                    const handle = document.getElementById('slider-handle');
+                    const instruction = document.getElementById('slider-instruction');
+
+                    if (!wrapper || !overlay || !handle) return;
+
+                    let active = false;
+
+                    const setPosition = (x) => {
+                        const rect = wrapper.getBoundingClientRect();
+                        let percent = (x - rect.left) / rect.width * 100;
+
+                        // Constrain
+                        percent = Math.max(0, Math.min(100, percent));
+
+                        // Update UI
+                        handle.style.left = `${percent}%`;
+
+                        // Clip the Overlay (Vintage/Left)
+                        // If vintage is ON TOP and needs to be on LEFT:
+                        // clip-path: inset(0 X% 0 0) where X is the amount HIDDEN from the right.
+                        // If percent is 50%, we want to show 50% from left. So we hide 50% from right.
+                        // So inset-right = 100 - percent.
+                        overlay.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+                    };
+
+                    // Initial State (50/50)
+                    setPosition(wrapper.getBoundingClientRect().width / 2 + wrapper.getBoundingClientRect().left);
+
+                    // Event Listeners
+                    const start = (e) => {
+                        active = true;
+                        instruction.style.opacity = '0'; // Hide instruction
+                        e.preventDefault();
+                    };
+
+                    const end = () => {
+                        active = false;
+                    };
+
+                    const move = (e) => {
+                        if (!active) return;
+                        let x = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                        setPosition(x);
+                    };
+
+                    handle.addEventListener('mousedown', start);
+                    handle.addEventListener('touchstart', start);
+
+                    window.addEventListener('mouseup', end);
+                    window.addEventListener('touchend', end);
+
+                    window.addEventListener('mousemove', move);
+                    window.addEventListener('touchmove', move);
+
+                    // Click to jump
+                    wrapper.addEventListener('click', (e) => {
+                        instruction.style.opacity = '0';
+                        setPosition(e.clientX);
+                    });
+                });
+            </script>
+
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-ace-gray text-slate-800 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-5xl font-merriweather font-bold text-ace-navy mb-4">The SGV Seal of
+                    Approval
+                </h2>
+                <p class="text-slate-600 text-lg">Neighbors trusting neighbors since '57. <span
+                        class="hidden md:inline text-fleet-yellow font-bold text-sm uppercase tracking-widest ml-2">Click
+                        to Shuffle</span></p>
+            </div>
+
+            <!-- Review Deck Container -->
+            <div class="review-deck-container" id="review-deck">
+                <!-- Cards injected via JS or hardcoded below -->
+                <!-- Card 1: Yelp - Jake -->
+                <div class="review-card" data-index="0">
+                    <div class="suit-icon">
+                        <!-- Yelp Logo (Red) - Cloned from Hero -->
+                        <svg role="img" viewBox="0 0 24 24" class="w-8 h-8 fill-current text-[#d32323]"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <title>Yelp</title>
+                            <path
+                                d="m7.6885 15.1415-3.6715.8483c-.3769.0871-.755.183-1.1452.155-.2611-.0188-.5122-.0414-.7606-.213a1.179 1.179 0 0 1-.331-.3594c-.3486-.5519-.3656-1.3661-.3697-2.0004a6.2874 6.2874 0 0 1 .3314-2.0642 1.857 1.857 0 0 1 .1073-.2474 2.3426 2.3426 0 0 1 .1255-.2165 2.4572 2.4572 0 0 1 .1563-.1975 1.1736 1.1736 0 0 1 .399-.2831 1.082 1.082 0 0 1 .4592-.0837c.2355.0016.5139.052.91.1734.0555.0191.1237.0382.1856.0572.3277.1013.7048.2404 1.1499.3987.6863.2404 1.3663.487 2.0463.7397l1.2117.4423c.2217.0807.4363.18.6412.297.174.0984.3273.2298.4512.387a1.217 1.217 0 0 1 .192.4309 1.2205 1.2205 0 0 1-.872 1.4522c-.0468.0151-.0852.0239-.1085.0293l-1.105.2553-.0031-.001zM18.8208 7.565a1.8506 1.8506 0 0 0-.2042-.1754 2.4082 2.4082 0 0 0-.2077-.1394 2.3607 2.3607 0 0 0-.2269-.109 1.1705 1.1705 0 0 0-.482-.0796 1.0862 1.0862 0 0 0-.4498.1263c-.2107.1048-.4388.2732-.742.5551-.042.0417-.0947.0886-.142.133-.2502.2351-.5286.5252-.8599.863a114.6363 114.6363 0 0 0-1.5166 1.5629l-.8962.9293a4.1897 4.1897 0 0 0-.4466.5483 1.541 1.541 0 0 0-.2364.5459 1.2199 1.2199 0 0 0 .0107.4518l.0046.02a1.218 1.218 0 0 0 1.4184.923 1.162 1.162 0 0 0 .1105-.0213l4.7781-1.104c.3766-.087.7587-.1667 1.097-.3631.2269-.1316.4428-.262.5909-.5252a1.1793 1.1793 0 0 0 .1405-.4683c.0733-.6512-.2668-1.3908-.5403-1.963a6.2792 6.2792 0 0 0-1.2001-1.7103zM8.9703.0754a8.6724 8.6724 0 0 0-.83.1564c-.2754.066-.548.1383-.8146.2236-.868.2844-2.0884.8063-2.295 1.8065-.1165.5655.1595 1.1439.3737 1.66.2595.6254.614 1.1889.9373 1.7777.8543 1.5545 1.7245 3.0993 2.5922 4.6457.259.4617.5416 1.0464 1.043 1.2856a1.058 1.058 0 0 0 .1013.0383c.2248.0851.4699.1016.7041.0471a4.3015 4.3015 0 0 0 .0418-.0097 1.2136 1.2136 0 0 0 .5658-.3397 1.1033 1.1033 0 0 0 .079-.0822c.3463-.435.3454-1.0833.3764-1.6134.1042-1.771.2139-3.5423.3009-5.3142.0332-.6712.1055-1.3333.0655-2.0096-.0328-.5579-.0368-1.1984-.3891-1.6563-.6218-.8073-1.9476-.741-2.8523-.6158zm2.084 15.9505a1.1053 1.1053 0 0 0-1.2306-.4145 1.1398 1.1398 0 0 0-.1526.0633 1.4806 1.4806 0 0 0-.2171.1354c-.1992.1475-.3668.3392-.5196.5315-.0386.049-.074.1143-.12.1562l-.7686 1.0573a113.9168 113.9168 0 0 0-1.2913 1.789c-.278.3895-.5184.7184-.7083 1.0094-.036.0547-.0734.116-.1075.1647-.2277.3522-.3566.6092-.4228.8381a1.0945 1.0945 0 0 0-.046.4721c.0211.1655.0768.3246.1635.467.046.0715.0957.1406.1487.207a2.334 2.334 0 0 0 .1754.1825 1.843 1.843 0 0 0 .2108.1732c.5304.369 1.1112.6342 1.722.8391a6.0958 6.0958 0 0 0 1.5716.3004c.091.0046.1821.0025.2728-.006a2.3878 2.3878 0 0 0 .2506-.0351 2.3862 2.3862 0 0 0 .2447-.071 1.1927 1.1927 0 0 0 .4175-.2658c.1127-.113.1994-.249.2541-.3989.0889-.2214.1473-.5026.1857-.92.0034-.0593.0118-.1305.0177-.1958.0304-.3463.0443-.7531.0666-1.2315.0375-.7357.067-1.4681.0903-2.2026 0 0 .0495-1.3053.0494-1.306.0113-.3008.002-.6342-.0814-.9336a1.396 1.396 0 0 0-.1756-.4054zm8.6754 2.0439c-.1605-.176-.3878-.3514-.7462-.5682-.0518-.0288-.1124-.0674-.1684-.1009-.2985-.1795-.658-.3684-1.078-.5965a120.7615 120.7615 0 0 0-1.9427-1.042l-1.1515-.6107c-.0597-.0175-.1203-.0607-.1766-.0878-.2212-.1058-.4558-.2045-.6992-.2498a1.4915 1.4915 0 0 0-.2545-.0265 1.1527 1.1527 0 0 0-.1648.01 1.1077 1.1077 0 0 0-.9227.9133 1.4186 1.4186 0 0 0 .0159.439c.0563.3065.1932.6096.3346.875l.615 1.1526c.3422.65.6884 1.2963 1.0435 1.9406.229.4202.4196.7799.5982 1.078.0338.056.0721.1163.1011.1682.2173.3584.392.584.569.7458.1146.1107.252.195.4026.247.1583.0525.326.071.4919.0546a2.368 2.368 0 0 0 .251-.0435c.0817-.022.1622-.048.241-.0784a1.863 1.863 0 0 0 .2475-.1143 6.1018 6.1018 0 0 0 1.2818-.9597c.4596-.4522.8659-.9454 1.182-1.51.044-.08.0819-.163.1138-.2483a2.49 2.49 0 0 0 .0773-.2411c.0186-.083.033-.1669.0429-.2513a1.188 1.188 0 0 0-.0565-.491 1.0933 1.0933 0 0 0-.248-.4041zm2.86 3.742a.8523.8523 0 0 1-.111.4236c-.074.132-.178.2377-.3115.3172a.8428.8428 0 0 1-.4385.119.847.847 0 0 1-.4373-.1179.8526.8526 0 0 1-.3125-.3171.8548.8548 0 0 1-.111-.4248c0-.1526.038-.2958.1143-.4294a.8405.8405 0 0 1 .315-.3159.849.849 0 0 1 .4315-.1156.8514.8514 0 0 1 .4294.1144.84.84 0 0 1 .316.3148.8494.8494 0 0 1 .1156.4317zm-.1202 0c0-.1328-.0332-.256-.0996-.3698s-.1564-.2038-.2702-.2702a.7125.7125 0 0 0-.371-.1007.7204.7204 0 0 0-.3698.0996.7487.7487 0 0 0-.2713.2702.7181.7181 0 0 0-.0996.3709c0 .132.0332.2557.0996.371a.7355.7355 0 0 0 .2713.2713.7354.7354 0 0 0 .3698.0985.7205.7205 0 0 0 .3698-.0996.7423.7423 0 0 0 .2702-.2691.7186.7186 0 0 0 .1008-.3721zm-.577.0584.2724.4522h-.1922l-.237-.4052h-.1546v.4052h-.1695v-1.02h.2988c.1268 0 .2195.0247.2783.0744.0595.0496.0892.1252.0892.2267a.2785.2785 0 0 1-.0492.1625c-.032.0466-.0775.0813-.1362.1042zm-.0412-.1408a.1532.1532 0 0 0 .056-.1214c0-.0573-.0164-.0981-.0491-.1225-.0329-.0251-.0847-.0377-.1557-.0377h-.1214v.3285h.1237c.061 0 .1098-.0157.1465-.047z" />
+                        </svg>
+                    </div>
+                    <div class="flex gap-1 mb-4">
+                        <!-- 5 Stars -->
+                        <div class="flex text-[#d32323]">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 italic text-lg leading-relaxed mb-4">"The installation was
+                        wonderful and
+                        <strong class="text-ace-navy">Jake's</strong> attention to detail was amazing. He even
+                        leveled
+                        out the toilet because our tile floor was not exactly level. Above and beyond."
+                    </p>
+                    <div class="flex items-center gap-3 border-t border-gray-100 pt-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-ace-navy text-white flex items-center justify-center font-bold font-serif">
+                            M</div>
+                        <div>
+                            <div class="font-bold text-ace-navy flex items-center gap-2">
+                                Mary L.
+                                <svg class="w-3 h-3 text-[#d32323]" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 0C5.373 0 0 5.373 0 12c0 6.627 5.373 12 12 12s12-5.373 12-12C24 5.373 18.627 0 12 0zm-2 17h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                                </svg>
+                                Yelp Verified
+                                </span>
+                            </div>
+                            <div class="text-xs text-slate-500 uppercase tracking-wide">Covina, CA</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Google - Jeremy -->
+                <div class="review-card" data-index="1">
+                    <div class="suit-icon">
+                        <!-- Google G (Multi-color) -->
+                        <svg class="w-7 h-7" viewBox="0 0 24 24">
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                fill="#4285F4" />
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                fill="#34A853" />
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                fill="#FBBC05" />
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                fill="#EA4335" />
+                        </svg>
+                    </div>
+                    <div class="flex gap-1 mb-4">
+                        <div class="flex text-[#FBBC05]">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 italic text-lg leading-relaxed mb-4">"Ace Pelizon is my go-to.
+                        <strong class="text-ace-navy">Jeremy</strong> was polite, knowledgeable, and went right
+                        to work to
+                        fix the leak. No up-selling, just honest work."
+                    </p>
+                    <div class="flex items-center gap-3 border-t border-gray-100 pt-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-ace-navy text-white flex items-center justify-center font-bold font-serif">
+                            A</div>
+                        <div>
+                            <div class="font-bold text-ace-navy flex items-center gap-2">
+                                Angela K.
+                                <span
+                                    class="bg-gray-100 text-slate-500 text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 border border-gray-200">
+                                    <svg class="w-3 h-3 text-[#34A853]" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                    </svg>
+                                    Google Verified
+                                </span>
+                            </div>
+                            <div class="text-xs text-slate-500 uppercase tracking-wide">San Gabriel, CA</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Google - Albert -->
+                <div class="review-card" data-index="2">
+                    <div class="suit-icon">
+                        <svg class="w-7 h-7" viewBox="0 0 24 24">
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                fill="#4285F4" />
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                fill="#34A853" />
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                fill="#FBBC05" />
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                fill="#EA4335" />
+                        </svg>
+                    </div>
+                    <div class="flex gap-1 mb-4">
+                        <div class="flex text-[#FBBC05]">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 italic text-lg leading-relaxed mb-4">"<strong
+                            class="text-ace-navy">Albert</strong> was very professional and helpful. I have
+                        requested
+                        Albert before and once again he completed the job in a timely, professional, and
+                        friendly
+                        manner."</p>
+                    <div class="flex items-center gap-3 border-t border-gray-100 pt-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-ace-navy text-white flex items-center justify-center font-bold font-serif">
+                            S</div>
+                        <div>
+                            <div class="font-bold text-ace-navy flex items-center gap-2">
+                                Steve R.
+                                <span
+                                    class="bg-gray-100 text-slate-500 text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 border border-gray-200">
+                                    <svg class="w-3 h-3 text-[#34A853]" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                    </svg>
+                                    Google Verified
+                                </span>
+                            </div>
+                            <div class="text-xs text-slate-500 uppercase tracking-wide">Pasadena, CA</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Google - Alan & Albert -->
+                <div class="review-card" data-index="3">
+                    <div class="suit-icon">
+                        <svg class="w-7 h-7" viewBox="0 0 24 24">
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                fill="#4285F4" />
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                fill="#34A853" />
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                fill="#FBBC05" />
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                fill="#EA4335" />
+                        </svg>
+                    </div>
+                    <div class="flex gap-1 mb-4">
+                        <div class="flex text-[#FBBC05]">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 italic text-lg leading-relaxed mb-4">"<strong class="text-ace-navy">Alan
+                            and Albert</strong>, the two service technicians, were professional, friendly, and
+                        carefully
+                        explained the proposed repair to the main water line."</p>
+                    <div class="flex items-center gap-3 border-t border-gray-100 pt-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-ace-navy text-white flex items-center justify-center font-bold font-serif">
+                            C</div>
+                        <div>
+                            <div class="font-bold text-ace-navy flex items-center gap-2">
+                                Carlos D.
+                                <span
+                                    class="bg-gray-100 text-slate-500 text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 border border-gray-200">
+                                    <svg class="w-3 h-3 text-[#34A853]" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                    </svg>
+                                    Google Verified
+                                </span>
+                            </div>
+                            <div class="text-xs text-slate-500 uppercase tracking-wide">West Covina, CA</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Google - Jake (NearbyNow) -->
+                <div class="review-card" data-index="4">
+                    <div class="suit-icon">
+                        <svg class="w-7 h-7" viewBox="0 0 24 24">
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                fill="#4285F4" />
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                fill="#34A853" />
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                fill="#FBBC05" />
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                fill="#EA4335" />
+                        </svg>
+                    </div>
+                    <div class="flex gap-1 mb-4">
+                        <div class="flex text-[#FBBC05]">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 italic text-lg leading-relaxed mb-4">"Completely satisfied with
+                        service.
+                        <strong class="text-ace-navy">Jake</strong> was prompt, polite, friendly, yet efficient
+                        and
+                        knowledgeable."
+                    </p>
+                    <div class="flex items-center gap-3 border-t border-gray-100 pt-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-ace-navy text-white flex items-center justify-center font-bold font-serif">
+                            L</div>
+                        <div>
+                            <div class="font-bold text-ace-navy flex items-center gap-2">
+                                Louise
+                                <span
+                                    class="bg-gray-100 text-slate-500 text-[10px] px-1.5 py-0.5 rounded flex items-center gap-1 border border-gray-200">
+                                    <svg class="w-3 h-3 text-[#34A853]" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                    </svg>
+                                    Google Verified
+                                </span>
+                            </div>
+                            <div class="text-xs text-slate-500 uppercase tracking-wide">West Covina, CA</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section: White Theme Layout -->
+    <section id="contact" class="relative w-full bg-white flex min-h-[800px] overflow-hidden">
+
+        <div class="w-full grid lg:grid-cols-2 relative z-10">
+
+            <!-- Left Panel: Contact Core (Form) -->
+            <div class="relative bg-white text-[#1b2a41] py-8 px-10 md:p-12 lg:p-24 flex flex-col justify-center">
+
+                <div class="relative z-10 w-full max-w-xl mx-auto">
+                    <!-- Headline -->
+                    <div class="mb-8 md:mb-16">
+                        <h2
+                            class="text-2xl md:text-4xl lg:text-5xl font-merriweather font-bold leading-tight md:leading-normal tracking-tight mb-5 md:mb-10 px-0 md:px-8 lg:px-0">
+                            Ready to Engineer <br />
+                            <span class="text-[#1b2a41] block mt-2">Your Peace of Mind?</span>
+                        </h2>
+                        <p
+                            class="text-[#1b2a41]/80 text-sm md:text-lg font-medium leading-relaxed max-w-md px-0 md:px-8 lg:px-0">
+                            Live telemetry from our Covina HQ. Delivering precision plumbing solutions to the
+                            SGV since
+                            1957.
+                        </p>
+                    </div>
+
+                    <!-- Form -->
+                    <form id="contactForm" class="space-y-3 md:space-y-16">
+
+                        <div class="space-y-3 md:space-y-12">
+                            <!-- Name Input -->
+                            <div class="group relative">
+                                <input type="text" id="name" required
+                                    class="peer w-full h-[32px] md:h-auto pb-0.5 md:py-4 bg-transparent border-b border-[#3b6ca3] md:border-[#1b2a41]/20 text-[#1b2a41] text-[14px] md:text-xl placeholder-transparent focus:border-b-2 focus:border-[#ffcc00] outline-none transition-all duration-300"
+                                    placeholder="Name" />
+                                <label for="name"
+                                    class="absolute left-0 top-2 md:top-4 text-[#1b2a41]/60 text-sm md:text-xl transition-all duration-300 peer-focus:opacity-0 md:peer-focus:-top-8 md:peer-focus:text-xs peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest md:peer-focus:opacity-100 peer-valid:opacity-0 md:peer-valid:-top-8 md:peer-valid:text-xs peer-valid:font-bold peer-valid:uppercase peer-valid:tracking-widest md:peer-valid:opacity-100 cursor-text font-mono">
+                                    FULL NAME
+                                </label>
+                            </div>
+
+                            <!-- Phone Input -->
+                            <div class="group relative">
+                                <input type="tel" id="phone" required
+                                    class="peer w-full h-[32px] md:h-auto pb-0.5 md:py-4 bg-transparent border-b border-[#3b6ca3] md:border-[#1b2a41]/20 text-[#1b2a41] text-[14px] md:text-xl placeholder-transparent focus:border-b-2 focus:border-[#ffcc00] outline-none transition-all duration-300"
+                                    placeholder="Phone" />
+                                <label for="phone"
+                                    class="absolute left-0 top-2 md:top-4 text-[#1b2a41]/60 text-sm md:text-xl transition-all duration-300 peer-focus:opacity-0 md:peer-focus:-top-8 md:peer-focus:text-xs peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest md:peer-focus:opacity-100 peer-valid:opacity-0 md:peer-valid:-top-8 md:peer-valid:text-xs peer-valid:font-bold peer-valid:uppercase peer-valid:tracking-widest md:peer-valid:opacity-100 cursor-text font-mono">
+                                    PHONE NUMBER
+                                </label>
+                            </div>
+
+                            <!-- Email Input -->
+                            <div class="group relative">
+                                <input type="email" id="email" required
+                                    class="peer w-full h-[32px] md:h-auto pb-0.5 md:py-4 bg-transparent border-b border-[#3b6ca3] md:border-[#1b2a41]/20 text-[#1b2a41] text-[14px] md:text-xl placeholder-transparent focus:border-b-2 focus:border-[#ffcc00] outline-none transition-all duration-300"
+                                    placeholder="Email" />
+                                <label for="email"
+                                    class="absolute left-0 top-2 md:top-4 text-[#1b2a41]/60 text-sm md:text-xl transition-all duration-300 peer-focus:opacity-0 md:peer-focus:-top-8 md:peer-focus:text-xs peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest md:peer-focus:opacity-100 peer-valid:opacity-0 md:peer-valid:-top-8 md:peer-valid:text-xs peer-valid:font-bold peer-valid:uppercase peer-valid:tracking-widest md:peer-valid:opacity-100 cursor-text font-mono">
+                                    EMAIL ADDRESS
+                                </label>
+                            </div>
+
+                            <!-- Message Input -->
+                            <div class="group relative">
+                                <textarea id="message" rows="1" required
+                                    class="peer w-full h-[32px] md:h-auto overflow-y-auto pb-0.5 md:py-4 bg-transparent border-b border-[#3b6ca3] md:border-[#1b2a41]/20 text-[#1b2a41] text-[14px] md:text-xl placeholder-transparent focus:border-b-2 focus:border-[#ffcc00] outline-none transition-all duration-300 resize-none"
+                                    placeholder="Message"></textarea>
+                                <label for="message"
+                                    class="absolute left-0 top-2 md:top-4 text-[#1b2a41]/60 text-sm md:text-xl transition-all duration-300 peer-focus:opacity-0 md:peer-focus:-top-8 md:peer-focus:text-xs peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest md:peer-focus:opacity-100 peer-valid:opacity-0 md:peer-valid:-top-8 md:peer-valid:text-xs peer-valid:font-bold peer-valid:uppercase peer-valid:tracking-widest md:peer-valid:opacity-100 cursor-text font-mono">
+                                    BRIEFING DETAILS
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Action Area -->
+                        <div class="flex items-center justify-between items-end pt-8 md:pt-4">
+                            <button type="submit"
+                                class="group relative bg-[#ffcc00] text-[#1b2a41] font-black text-sm md:text-lg py-3 px-8 md:py-5 md:px-12 rounded-full shadow-[0_10px_30px_-10px_rgba(255,204,0,0.4)] hover:shadow-[0_20px_40px_-10px_rgba(255,204,0,0.5)] hover:scale-105 transition-all duration-300 uppercase tracking-widest overflow-hidden">
+                                <span class="relative z-10 flex items-center gap-3">
+                                    Initiate
+                                    <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </span>
+                                <!-- White Gloss Overlay -->
+                                <div class="absolute inset-x-0 top-0 h-1/2 bg-white/20 pointer-events-none">
+                                </div>
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Panel: Visual Telemetry (Map) -->
+            <div class="relative bg-white text-[#1b2a41] p-12 lg:p-24 flex flex-col justify-center">
+
+                <div class="relative z-10 w-full max-w-xl mx-auto">
+                    <!-- Live Map Module -->
+                    <div
+                        class="relative w-full aspect-video rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 group shadow-2xl mb-8">
+                        <!-- Map Layer -->
+                        <iframe
+                            src="https://maps.google.com/maps?q=138+E+Badillo+St,+Covina,+CA+91723&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                            class="w-full h-full absolute inset-0 opacity-80 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 mix-blend-multiply filter contrast-125"
+                            allowfullscreen="" loading="lazy">
+                        </iframe>
+
+                        <!-- Radar Ripple Animation -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                            <div class="relative">
+                                <div
+                                    class="w-4 h-4 bg-[#ffcc00] rounded-full shadow-[0_0_20px_rgba(255,204,0,1)] relative z-20">
+                                </div>
+                                <!-- Expanding Wave 1 -->
+                                <div
+                                    class="absolute inset-0 bg-[#ffcc00] rounded-full animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] opacity-40 z-10">
+                                </div>
+                                <!-- Expanding Wave 2 (Delayed) -->
+                                <div
+                                    class="absolute inset-0 bg-[#ffcc00] rounded-full animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] opacity-20 z-0 delay-1000">
+                                </div>
+
+                                <!-- Spade Icon Overlay -->
+                                <svg class="absolute -top-6 -left-3 w-10 h-10 text-[#ffcc00] drop-shadow-xl z-30 transform -translate-y-1"
+                                    fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2C9 2 2 12 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 12 15 2 12 2ZM12 4.41L15.4 9C15.4 9 12 14.59 12 14.59C12 14.59 8.6 9 8.6 9L12 4.41Z" />
+                                    <path d="M12,22c4.97,0,9-4.03,9-9c0,0-5-11-9-11S3,13,3,13C3,17.97,7.03,22,12,22z" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- HUD Overlays -->
+                        <div
+                            class="absolute bottom-6 left-6 right-6 flex justify-between items-end pointer-events-none">
+                            <div
+                                class="bg-white/90 backdrop-blur px-4 py-2 rounded text-xs font-mono text-[#1b2a41] tracking-widest uppercase shadow-lg border border-slate-100">
+                                HQ: 34.0900° N, 117.8903° W
+                            </div>
+                            <div class="flex gap-1.5">
+                                <div class="w-1.5 h-1.5 bg-[#1b2a41]/20 rounded-full"></div>
+                                <div class="w-1.5 h-1.5 bg-[#1b2a41]/20 rounded-full"></div>
+                                <div class="w-1.5 h-1.5 bg-[#ffcc00] rounded-full animate-pulse"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trust Bar -->
+                    <div class="grid grid-cols-3 gap-4 mb-8 border-b border-slate-200 pb-8">
+
+                        <div
+                            class="flex flex-col items-center justify-center text-center border-r border-slate-100 px-2 last:border-0">
+                            <div class="text-[10px] font-bold text-[#1b2a41] uppercase tracking-widest mb-1.5">
+                                Google
+                                Verified</div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <!-- Google G Logo (Multi-colored) -->
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                        fill="#4285F4" />
+                                    <path
+                                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                        fill="#34A853" />
+                                    <path
+                                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.21.81-.63z"
+                                        fill="#FBBC05" />
+                                    <path
+                                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                        fill="#EA4335" />
+                                </svg>
+                                <span class="text-3xl font-bold text-[#1b2a41]">4.9</span>
+                            </div>
+                            <div class="text-[10px] font-bold text-[#1b2a41]/60 uppercase tracking-widest">295+
+                                Reviews
+                            </div>
+                        </div>
+
+                        <!-- Yelp -->
+                        <div
+                            class="flex flex-col items-center justify-center text-center border-r border-slate-100 px-2 last:border-0">
+                            <div class="text-[10px] font-bold text-[#1b2a41] uppercase tracking-widest mb-1.5">
+                                Yelp
+                                Elite</div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <!-- Yelp Logo (Red) -->
+                                <!-- Yelp Logo (Modern Burst - Official SVG) -->
+                                <!-- Yelp Logo (Modern Burst - Inline SVG) -->
+                                <!-- Yelp Logo (Modern Burst - Inline SVG - Official Transparent) -->
+                                <svg role="img" viewBox="0 0 512 512" class="w-7 h-7 text-[#d32323]"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <title>Yelp</title>
+                                    <path
+                                        d="M248.32,74.24c-1.28-4.69-5.12-8.11-10.24-9.81-16.21-4.27-79.36,13.65-90.88,26-3.84,3.84-5.12,9-3.84,13.23,1.71,3.84,79.79,128.43,79.79,128.43,11.52,18.77,20.9,16.21,23.89,14.93,3-.85,12.37-3.84,11.52-26C256.85,195,249.17,79.79,248.32,74.24ZM214.61,308.05c6.4-1.7,10.67-7.68,11.1-14.93.42-7.68-3.42-14.51-9.82-17.07L198,268.8c-61-25.6-63.57-26.45-66.56-26.45-4.69-.43-9,2.13-11.94,6.82-6,9.82-8.54,41.39-6.4,62.3.85,6.82,2.13,12.8,3.84,16.21,2.56,4.69,6.4,7.68,11.09,7.68,3,0,4.69-.43,61.44-18.77Zm32,23.47c-6.82-3-14.5-1.28-18.77,4.27l-12.37,14.93c-42.67,51.2-44.38,53.33-45.66,56.32a12.66,12.66,0,0,0-.85,5.55,11.5,11.5,0,0,0,3.41,7.68c9.82,11.94,57.18,29.86,72.54,27.3A13.06,13.06,0,0,0,255.57,439c.86-3,1.28-5.12,1.28-65.28V346.45C257.71,340.05,253.44,334.08,246.61,331.52Zm148.48,12c-2.56-1.71-4.26-2.56-61-21.34,0,0-24.75-8.53-25.17-8.53-6-2.56-12.8-.43-17.5,5.55s-5.54,13.65-1.7,19.62l9.81,16.64c33.71,55.47,36.27,59.31,38.4,61.44,3.84,3,8.53,3.42,13.65,1.28,14.51-6,45.66-46.08,47.79-61.86C400.21,351.15,398.93,346.45,395.09,343.47Zm-91.3-63.15c9-1.71,82.34-19.2,88.32-23.47,3.84-2.56,6-7.25,5.54-12.8v-.42c-1.7-16.22-29.44-58-43.09-64.86-4.69-2.13-9.81-2.13-13.65.43-2.56,1.71-4.27,4.27-38.83,52.05L286.29,253c-4.26,5.12-4.26,12.38,0,18.78C290.56,278.61,294.83,282,303.79,280.32Z"
+                                        fill="#d32323" />
+                                </svg>
+                                <span class="text-3xl font-bold text-[#1b2a41]">4.0</span>
+                            </div>
+                            <div class="text-[10px] font-bold text-[#1b2a41]/60 uppercase tracking-widest">95+
+                                Reviews
+                            </div>
+                        </div>
+
+                        <!-- BBB -->
+                        <div class="flex flex-col items-center justify-center text-center px-2">
+                            <div class="text-[10px] font-bold text-[#1b2a41] uppercase tracking-widest mb-1.5">
+                                BBB
+                                Accredited</div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <!-- BBB Logo (Blue) - Cloned from Hero -->
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 562 961.27728" class="w-7 h-7"
+                                    style="fill:#005f86;">
+                                    <path
+                                        d="M 438.82309,541.63751 H 122.78223 l -11.44575,37.79071 h 84.26441 l 15.98458,52.0979 h 138.43438 l 16.08325,-52.0979 h 84.16574 z M 174.38678,329.49644 c -24.21078,33.38046 -16.79065,80.06548 16.5766,104.29447 l 75.6801,54.95934 c 8.40139,6.05364 10.26194,17.79282 4.14415,26.14762 l 11.34708,8.18963 39.96146,-55.05801 c 9.27836,-12.68718 14.28817,-27.99303 14.30718,-43.71092 -0.0345,-3.99857 -0.36429,-7.98913 -0.9867,-11.93911 -3.02182,-19.52693 -13.66772,-37.05719 -29.60108,-48.74311 l -75.58142,-54.86066 c -4.20569,-2.8155 -7.06201,-7.2428 -7.89362,-12.23512 -0.0987,-0.9867 -0.0987,-1.9734 0,-2.9601 0.0257,-3.92987 1.26633,-7.75559 3.55213,-10.9524 l -11.34708,-8.28831 z m 45.58566,-220.82405 c -13.40338,18.40159 -20.6237,40.58079 -20.62208,63.34631 -0.0296,5.78208 0.43415,11.56416 1.38138,17.2673 4.41172,28.39377 20.01208,53.83763 43.31625,70.64791 l 95.11813,69.06918 c 12.46002,9.0002 20.80787,22.60543 23.18751,37.79071 0.50618,3.06616 0.77012,6.16742 0.78936,9.27501 -0.0483,12.14552 -3.95229,23.96193 -11.14974,33.74523 l 9.17634,6.6109 74.89073,-103.5051 C 471.02906,264.44314 460.2148,196.82441 411.88611,161.65832 L 297.13259,78.281951 c -7.17549,-5.19686 -11.97238,-13.04955 -13.32049,-21.80613 -1.46339,-8.74763 0.67179,-17.71533 5.92022,-24.8649 l -9.07767,-6.61091 z M 25.78936,663.1006 h 86.63249 c 17.789,-1.18103 35.31967,4.74532 48.74311,16.47794 8.4291,8.35068 13.03501,19.81189 12.72847,31.67315 v 0.59203 c 0.47766,17.0409 -9.10688,32.77041 -24.47023,40.15879 21.51012,8.2883 34.83061,20.81943 34.83061,45.88168 0,34.13991 -27.62768,51.20986 -69.75988,51.20986 H 25.69069 Z m 78.14685,75.38409 c 18.05666,0 29.60108,-5.92022 29.60108,-19.73406 0,-12.33378 -9.86703,-19.73405 -26.93698,-19.73405 H 65.75082 v 39.46811 z m 10.85373,75.08807 c 18.15533,0 29.00906,-6.41357 29.00906,-19.73406 v -0.59202 c 0,-12.43245 -9.27501,-19.73405 -30.29177,-19.73405 H 65.75082 v 41.04683 z M 202.60648,663.1006 h 86.63249 c 17.78899,-1.18103 35.31966,4.74532 48.74311,16.47794 8.39292,8.36738 12.96228,19.82649 12.62979,31.67315 v 0.59203 c 0.47766,17.0409 -9.10688,32.77041 -24.47022,40.15879 21.60878,8.2883 34.92927,20.81943 34.92927,45.88168 0,34.13991 -27.72634,51.20986 -69.85855,51.20986 h -88.60589 z m 77.85083,75.38409 c 18.05666,0 29.60108,-5.92022 29.60108,-19.73406 0,-12.33378 -9.86702,-19.73405 -26.83831,-19.73405 h -41.1455 v 39.46811 z m 10.85373,75.08807 c 18.15533,0 29.00906,-6.41357 29.00906,-19.73406 v -0.59202 c 0,-12.43245 -9.27501,-19.73405 -30.29177,-19.73405 h -47.95375 v 41.04683 z M 378.43689,663.1006 h 86.63249 c 17.78899,-1.18103 35.31966,4.74532 48.74311,16.47794 8.42909,8.35068 13.035,19.81189 12.72846,31.67315 v 0.59203 c 0.47766,17.0409 -9.10688,32.77041 -24.47022,40.15879 21.60878,8.2883 34.92927,20.81943 34.92927,45.88168 0,34.13991 -27.72634,51.20986 -69.85855,51.20986 h -88.80323 z m 77.85083,75.38409 c 18.05666,0 29.60108,-5.92022 29.60108,-19.73406 0,-12.33378 -9.86702,-19.73405 -26.83831,-19.73405 h -40.65215 v 39.46811 z m 10.85373,75.08807 c 18.15533,0 29.10773,-6.41357 29.10773,-19.73406 v -0.59202 c 0,-12.43245 -9.37367,-19.73405 -30.39044,-19.73405 h -47.4604 v 41.04683 z M 25,928.81963 l 3.25612,-3.74947 c 4.39964,4.27772 10.34408,6.59143 16.47793,6.41356 6.3149,0 10.55772,-3.25612 10.55772,-7.69628 0,-4.24282 -2.36809,-6.61091 -12.33378,-8.68298 -9.9657,-2.07208 -15.78724,-5.72288 -15.78724,-13.22182 0.66708,-7.8189 7.70551,-13.51242 15.49123,-12.53112 6.02325,-0.18747 11.91102,1.81014 16.5766,5.62421 l -3.15745,3.94681 c -3.75203,-3.51636 -8.67266,-5.51976 -13.81383,-5.62421 -6.11756,0 -9.86703,3.25612 -9.86703,7.40027 0,4.34149 2.46676,6.80825 12.82713,8.97899 10.36038,2.17075 15.2939,5.92022 15.2939,12.92581 0,7.89362 -6.70958,13.02447 -16.08326,13.02447 C 37.32638,935.92825 30.37002,933.49175 25,928.81963 Z m 45.09231,-2.26942 v -20.42474 h -4.83484 v -4.44017 h 4.83484 v -9.86702 h 5.13085 v 9.86702 h 11.05107 v 4.44017 H 75.22316 v 19.73405 c 0,4.14415 2.36809,5.6242 5.92022,5.6242 1.75005,0.0326 3.48029,-0.37455 5.03218,-1.18404 v 4.34149 c -1.90607,1.03087 -4.05011,1.54135 -6.21622,1.48006 -5.6017,0.72542 -10.42153,-3.94983 -9.86703,-9.57102 z m 20.72076,-0.88803 c 0,-7.10426 6.01888,-10.9524 14.89921,-10.9524 3.60619,-0.0434 7.1984,0.45595 10.65638,1.48005 v -1.18404 c 0,-6.11756 -3.84814,-9.27501 -9.86702,-9.27501 -3.66702,0.0533 -7.27519,0.92997 -10.55772,2.56543 l -1.87474,-4.24282 c 3.97722,-1.88855 8.32564,-2.86611 12.72847,-2.86144 4.09421,-0.25911 8.12852,1.08564 11.24841,3.74947 2.46676,2.67397 3.74947,6.23596 3.55213,9.86703 v 20.72075 h -5.22953 v -5.13085 c -2.99152,3.7959 -7.60125,5.95442 -12.43245,5.82155 -6.61091,0 -13.12314,-3.45346 -13.12314,-10.55772 z m 25.65426,-2.76277 v -3.25612 c -3.20093,-0.9643 -6.52403,-1.46278 -9.86702,-1.48005 -6.51224,0 -9.86703,2.76276 -9.86703,7.00559 0,4.34149 4.04548,6.80824 8.78166,6.80824 5.46328,0.3049 10.23821,-3.65268 10.95239,-9.07766 z m 13.91251,-21.21411 h 5.22953 v 8.88033 c 2.05801,-6.00675 7.76162,-9.99529 14.10984,-9.86703 v 5.42687 c -8.32632,-0.0701 -14.79373,7.23477 -13.71516,15.49123 v 13.51782 h -5.22953 z m 27.03565,24.86491 v -20.42474 h -4.83484 v -4.44017 h 4.83484 v -9.86702 h 5.72288 v 9.86702 h 11.05107 v 4.44017 h -11.05107 v 19.73405 c 0,4.14415 2.36809,5.6242 5.82155,5.6242 1.75004,0.0326 3.48028,-0.37455 5.03218,-1.18404 v 4.34149 c -1.90608,1.03087 -4.05011,1.54135 -6.21623,1.48006 -5.78982,1.09324 -10.99232,-3.71288 -10.36038,-9.57102 z" />
+                                </svg>
+                                <span class="text-3xl font-bold text-[#1b2a41]">A+</span>
+                            </div>
+                            <div class="text-[10px] font-bold text-[#1b2a41]/60 uppercase tracking-widest">Since
+                                1995
+                            </div>
+                        </div>
+
+
+                        <!-- Bottom Status (Hidden on Mobile, Visible on Desktop) -->
+                        <div class="hidden lg:flex items-center justify-between pt-2">
+                            <div>
+                                <div class="text-xs font-bold text-[#1b2a41]/40 uppercase tracking-widest mb-1">
+                                    Direct
+                                    Line
+                                </div>
+                                <div class="text-3xl font-sans text-[#1b2a41] tracking-wide font-light">(626)
+                                    331-0701
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs font-bold text-[#1b2a41]/40 uppercase tracking-widest mb-1">
+                                    System
+                                    Status</div>
+                                <div
+                                    class="flex items-center gap-3 text-sm text-[#eaaa00] font-mono tracking-wider font-bold">
+                                    <span class="relative flex h-3 w-3">
+                                        <span
+                                            class="animate-[ping_2s_linear_infinite] absolute inline-flex h-full w-full rounded-full bg-[#ffcc00] opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-3 w-3 bg-[#ffcc00]"></span>
+                                    </span>
+                                    ACTIVE
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Serial Number Anchor -->
+                    <!-- Serial Number Anchor -->
+                    <div class="hidden lg:block absolute bottom-6 right-6 lg:bottom-12 lg:right-12 text-right">
+                        <p class="font-mono text-xs text-[#1b2a41]/30 uppercase tracking-widest leading-relaxed">
+                            SECURE_CONNECTION<br />SGV.57.COV.CA
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-center md:text-left">
+                    <div class="text-2xl font-merriweather font-bold tracking-tight mb-2">
+                        ACE PELIZON<span class="text-fleet-yellow">.</span>
+                    </div>
+                    <p class="text-slate-500 text-sm">
+                        © 2026 Ace Pelizon Plumbing. All rights reserved.
+                    </p>
+                </div>
+
+                <div class="flex gap-8 text-sm text-slate-400">
+                    <a href="#" class="hover:text-fleet-yellow transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-fleet-yellow transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-fleet-yellow transition-colors">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Mobile Sticky Conversion Bar -->
+    <!-- Thumb-Command Deck (Mobile Only) -->
+    <div id="mobile-conversion-bar" class="hidden">
+        <a href="tel:626-331-0701" class="dock-btn dock-btn-primary w-full">
+            Call (626) 331-0701
+        </a>
+    </div>
+
+    <script>
+        // --- CONTACT FORM LOGIC ---
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            const originalBg = btn.classList.contains('bg-fleet-yellow') ? 'bg-fleet-yellow' : '';
+
+            // Loading State - HIDDEN SPINNER AS REQUESTED
+            btn.innerText = 'Sending...';
+            // btn.disabled = true;  <-- Optional: keep enabled if preferred, but standard practice is disable
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            // Remove spinner element if it exists in CSS logic, or just ensure text is all that shows.
+            // (User asked "spinning circle disappear" - often added via pseudo-element or icon to .loading class)
+            // Ensure no spinner class is added.
+
+            // Simulate Network Request
+            setTimeout(() => {
+                // Success State
+                btn.innerText = 'Request Sent!';
+                btn.classList.remove('bg-fleet-yellow', 'hover:bg-yellow-700');
+                btn.classList.add('bg-green-600', 'hover:bg-green-700');
+
+                // Reset Form
+                this.reset();
+
+                // Revert to Normal after 3 seconds
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-75', 'cursor-not-allowed', 'bg-green-600', 'hover:bg-green-700');
+                    btn.classList.add('bg-fleet-yellow', 'hover:bg-yellow-700');
+                }, 3000);
+            }, 1500);
+        });
+
+        // --- PREMIUM FEATURES JS ---
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 1. Cinematic Curtain Load
+            const curtain = document.getElementById('intro-curtain');
+            setTimeout(() => {
+                // Determine direction based on scroll or just slide up
+                curtain.classList.add('-translate-y-full');
+            }, 2500); // 2.5s delay to read the intro text
+
+
+            // 3. X-Ray Cards (Mouse Tracking)
+            const cards = document.querySelectorAll('.carousel-card');
+            cards.forEach(card => {
+                card.classList.add('group/card'); // Ensure group class exists
+
+                // Mouse Tracking for X-Ray
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    // Find the overlay and update variables
+                    const overlay = card.querySelector('.x-ray-overlay');
+                    if (overlay) {
+                        overlay.style.setProperty('--x', `${x}px`);
+                        overlay.style.setProperty('--y', `${y}px`);
+                    }
+                });
+            });
+
+        });
+    </script>
+    <!-- Cinematic Smooth Scroll Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const anchors = document.querySelectorAll('a[href^="#"]');
+
+            // Easing function: easeInOutCubic (Smooth acceleration and deceleration)
+            // t = current time, b = start value, c = change in value, d = duration
+            const easeInOutCubic = (t, b, c, d) => {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t * t + b;
+                t -= 2;
+                return c / 2 * (t * t * t + 2) + b;
+            };
+
+            const smoothScrollTo = (target, duration = 1500) => {
+                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+                const startPosition = window.pageYOffset;
+                const distance = targetPosition - startPosition;
+                let startTime = null;
+
+                const animation = (currentTime) => {
+                    if (startTime === null) startTime = currentTime;
+                    const timeElapsed = currentTime - startTime;
+                    const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
+
+                    window.scrollTo(0, run);
+
+                    if (timeElapsed < duration) {
+                        requestAnimationFrame(animation);
+                    }
+                };
+
+                requestAnimationFrame(animation);
+            };
+
+            anchors.forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+
+                    // Only intercept valid hash links
+                    if (href.startsWith('#') && href.length > 1) {
+                        e.preventDefault();
+                        const targetElement = document.querySelector(href);
+                        if (targetElement) {
+                            smoothScrollTo(targetElement, 1200); // 1.2s duration for "cinematic" weight
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- Cinema Scroll Parallax Script -->
+    <script>
+        document.addEventListener('scroll', () => {
+            if (window.innerWidth <= 768) {
+                const scrolled = window.scrollY;
+                const heroLogo = document.querySelector('.floating-card img');
+                const heroText = document.querySelector('.hero-headline');
+
+                // Parallax Logic
+                if (heroLogo && scrolled < 600) {
+                    const rotation = scrolled * 0.05;
+                    heroLogo.style.transform = `scale(1.21) translate(-5px, 6px) rotateY(${rotation}deg)`;
+                }
+
+                if (heroText && scrolled < 600) {
+                    // DISABLED PARALLAX AS REQUESTED
+                    // heroText.style.transform = `translateY(${scrolled * 0.2}px)`;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
